@@ -269,8 +269,8 @@ class Video:
                 put(f, lay, x, y + i * el.get("step", 150) + flo, back(kk), angle=(-2 if i % 2 == 0 else 2))
         elif kind == "cards2":
             (a1, a2), (b1, b2) = el["a"], el["b"]
-            put(f, card_layer(a1, a2, False), 320, el.get("y", 860) + flo, back(k / 0.5), angle=-5)
-            put(f, card_layer(b1, b2, True), 770, el.get("y", 860) + 70 - flo, back((k - 0.5) / 0.5), angle=5)
+            put(f, card_layer(a1, a2, False, 420, 380), 345, el.get("y", 860) + 40 + flo, back(k / 0.5), angle=-5)
+            put(f, card_layer(b1, b2, True, 420, 380), 740, el.get("y", 860) + 130 - flo, back((k - 0.5) / 0.5), angle=5)
         elif kind == "photo":
             lay = photo_layer(el["pid"], el.get("w", 470), el.get("h", 600))
             put(f, lay, el.get("x", 780), el.get("y", 960) + flo, back(k / 0.55), angle=el.get("ang", 4))
@@ -279,7 +279,7 @@ class Video:
             for i, txt in enumerate(el["items"]):
                 kk = (k - i * el.get("gap", 0.5)) / 0.45
                 if kk <= 0: continue
-                im = rrect((904, 140), 40, CARD_CREAM + (255,)) if bg == "brown" else rrect((904, 140), 40, CARD_DARK + (255,))
+                im = rrect((860, 140), 40, CARD_CREAM + (255,)) if bg == "brown" else rrect((860, 140), 40, CARD_DARK + (255,))
                 d = ImageDraw.Draw(im)
                 d.ellipse((24, 24, 116, 116), fill=(CARD_DARK if bg == "brown" else (201, 170, 144)) + (255,))
                 d.text((70, 72), str(i + 1), font=HB(52), fill=(246, 240, 230) if bg == "brown" else INK, anchor="mm")
@@ -287,11 +287,11 @@ class Video:
                 put(f, shadow_wrap(im, 18, 12, 70), 540, y + 70 + i * 170, back(kk), angle=(-1.5 if i % 2 == 0 else 1.5))
         elif kind == "msg":
             kk = back(k / 0.5)
-            im = rrect((904, 150), 75, (255, 255, 255, 255))
+            im = rrect((860, 150), 75, (255, 255, 255, 255))
             put(f, shadow_wrap(im, 20, 14, 70), 540, el.get("y", 820), kk)
             word = el["word"]; n = int(clamp((k - 0.5) / 1.0) * len(word) + 0.001)
             if kk > 0.6:
-                d = ImageDraw.Draw(f); x0 = 540 - 452 + 60
+                d = ImageDraw.Draw(f); x0 = 540 - 430 + 60
                 d.text((x0, el.get("y", 820) + 2), word[:n], font=HB(76), fill=INK, anchor="lm")
                 if int(lt * 2.5) % 2 == 0:
                     bx = x0 + text_w(word[:n], HB(76)) + 6
@@ -300,7 +300,7 @@ class Video:
                 send = Image.new("RGBA", (116, 116), (0, 0, 0, 0)); sd = ImageDraw.Draw(send)
                 sd.ellipse((0, 0, 115, 115), fill=BG["brown"] + (255,)) if bg == "cream" else sd.ellipse((0, 0, 115, 115), fill=CARD_DARK + (255,))
                 sd.polygon([(36, 84), (36, 34), (88, 60)], fill=(246, 240, 230))
-                put(f, send, 540 + 452 - 80, el.get("y", 820), pul)
+                put(f, send, 540 + 430 - 80, el.get("y", 820), pul)
         elif kind == "bars":
             y = el.get("y", 740)
             for i, (lab, fr, dark) in enumerate(el["rows"]):
@@ -324,9 +324,14 @@ class Video:
         f.alpha_composite(avatar(), (88, 175))
         d.text((200, 223), HANDLE, font=HB(36), fill=INK, anchor="lm")
         self.draw_head(f, sc, lt, bg)
-        for el in sc.get("els", []): self.draw_el(f, el, lt, sdur, bg)
+        layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        for el in sc.get("els", []): self.draw_el(layer, el, lt, sdur, bg)
+        SC_ = 1.1
+        big = layer.resize((int(W * SC_), int(H * SC_)), Image.BICUBIC)
+        ox, oy = int(540 * SC_ - 540), int(650 * SC_ - 650)
+        f.alpha_composite(big.crop((ox, oy, ox + W, oy + H)))
         # плашка с подписью
-        bar = rrect((904, 124), 40, CARD_DARK + (255,)); f.alpha_composite(shadow_wrap(bar, 14, 10, 60), (88 - 42, 1360 - 42))
+        bar = rrect((904, 124), 40, CARD_DARK + (255,)); f.alpha_composite(shadow_wrap(bar, 14, 10, 60), (88 - 42, 1480 - 42))
         ci = None
         for i, ch in enumerate(self.chunks):
             if self.wt[ch[0]][0] - 0.03 <= t: ci = i
@@ -337,12 +342,12 @@ class Video:
             for i in ch:
                 w = self.words[i] + " "
                 col = (246, 240, 230) if t >= self.wt[i][0] - 0.02 else GREY
-                d.text((x, 1422), w, font=fnt, fill=col, anchor="lm"); x += text_w(w, fnt)
+                d.text((x, 1542), w, font=fnt, fill=col, anchor="lm"); x += text_w(w, fnt)
         # прогресс
         p = clamp(t / self.total)
         track = (255, 255, 255, 70) if bg == "brown" else (200, 192, 180, 255)
-        d = ImageDraw.Draw(f); d.rounded_rectangle((88, 1536, 992, 1544), 4, fill=track)
-        d.rounded_rectangle((88, 1536, 88 + 904 * p, 1544), 4, fill=CARD_DARK + (255,))
+        d = ImageDraw.Draw(f); d.rounded_rectangle((88, 1660, 992, 1668), 4, fill=track)
+        d.rounded_rectangle((88, 1660, 88 + 904 * p, 1668), 4, fill=CARD_DARK + (255,))
         return f.convert("RGB")
 
     def render(self):
