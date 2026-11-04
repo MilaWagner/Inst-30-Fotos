@@ -248,14 +248,14 @@ class Video:
 
     # --- элементы ---
     def draw_el(self, f, el, lt, sdur, bg):
-        t0 = el.get("at", 0.0) * sdur + 0.35
+        t0 = 0.2 + min(el.get("at", 0.0) * sdur * 0.5, 0.7)
         k = lt - t0
         kind = el["k"]
         flo = math.sin(lt * 2.2 + el.get("ph", 0)) * 4
         if kind == "pills":
             x, y = el.get("x", 540), el.get("y", 760)
             for i, txt in enumerate(el["items"]):
-                kk = (k - i * el.get("gap", 0.35)) / 0.45
+                kk = (k - i * el.get("gap", 0.3)) / 0.45
                 if kk <= 0: continue
                 lay = pill_layer(txt, el.get("size", 52))
                 put(f, lay, x + (el.get("dx", 0) if i % 2 else 0), y + i * el.get("step", 150) + flo, back(kk), angle=(-3 if i % 2 == 0 else 3))
