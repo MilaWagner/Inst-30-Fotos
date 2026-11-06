@@ -82,8 +82,27 @@ def _mono():
     d.text((48, 50), "О", font=E.HI(56), fill=(214, 180, 150), anchor="mm")
     return o
 E.avatar = _mono
-def _no_whisper(*a, **k): raise FileNotFoundError
-E.whisper_align = _no_whisper
+VOICE_REC = SP + "audio/olga_voice_norm.wav"     # её запись (если есть)
+WORDS_REC = SP + "olga_words.json"              # тайминги слов её записи (faster-whisper)
+import json, difflib
+def _align(num, words, fallback):
+    if not (os.path.exists(VOICE_REC) and os.path.exists(WORDS_REC)): raise FileNotFoundError
+    wh = [(a, b, w) for a, b, w in json.load(open(WORDS_REC)) if E._norm(w)]
+    A = [E._norm(w) for w in words]; Bn = [E._norm(w[2]) for w in wh]
+    start = [None] * len(words); end = [None] * len(words)
+    for i, j, n in difflib.SequenceMatcher(None, A, Bn, autojunk=False).get_matching_blocks():
+        for k in range(n): start[i + k], end[i + k] = wh[j + k][0], wh[j + k][1]
+    n = len(words)
+    for i in range(n):
+        if start[i] is None:
+            l = i - 1
+            while l >= 0 and start[l] is None: l -= 1
+            r = i + 1
+            while r < n and start[r] is None: r += 1
+            lt = end[l] if l >= 0 else fallback[0][0]; rt = start[r] if r < n else fallback[-1][1]
+            start[i] = lt + (rt - lt) * (i - l) / (r - l); end[i] = lt + (rt - lt) * (i - l + 0.8) / (r - l)
+    return list(zip(start, end))
+E.whisper_align = _align
 
 
 # ---------- рисованные иллюстрации (без стоков) ----------
@@ -202,7 +221,7 @@ class OlgaVideo(E.Video):
 
 TEXT = ("Вечер. Ты наконец села отдохнуть, и снова сводит ногу. Знакомо? "
         "Причин может быть несколько: мало воды, мало движения, нехватка минералов. "
-        "Один из важных минералов — магний. "
+        "Один из важных минералов — это магний. "
         "Он способствует нормальной работе мышц и уменьшению усталости. "
         "И нужен для нормального состояния костей и зубов. "
         "Пить его просто: один пакетик порошка развести в стакане воды и выпить маленькими глотками. "
@@ -238,8 +257,9 @@ def voice(path):
                    input=TEXT.encode(), check=True)
 
 def make():
-    a = SP + "audio/olga_magnij.wav"; voice(a)
-    return OlgaVideo(0, TEXT, a, SCENES, OUT + "olga_magnij_v2style.mp4")
+    if os.path.exists(VOICE_REC): a = VOICE_REC
+    else: a = SP + "audio/olga_magnij.wav"; voice(a)
+    return OlgaVideo(0, TEXT, a, SCENES, OUT + "olga_magnij_golos.mp4")
 
 if __name__ == "__main__":
     v = make()
