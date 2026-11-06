@@ -24,6 +24,58 @@ E.HB = lambda s: _var(SP + "fonts/Manrope%5Bwght%5D.ttf", s, 800)
 E.HI = lambda s: _var(SP + "fonts/PlayfairDisplay-Italic%5Bwght%5D.ttf", s, 600)
 E.HANDLE = "Ольга · энергия каждый день"
 
+# ---------- стиль Ольги: кремовая бумага, акварельные розы, шалфей ----------
+SAGE = (122, 148, 108); BLUSH = (241, 184, 178); PEACH = (247, 200, 168); MAUVE = (146, 98, 92)
+E.BG = {"brown": (246, 236, 228), "cream": (250, 246, 239)}
+E.INK = (84, 68, 62)
+E.ITAL = {"brown": MAUVE, "cream": SAGE}
+E.CARD_DARK = SAGE; E.CARD_CREAM = (255, 252, 247); E.BROWN_LIGHT = (252, 232, 222); E.GREY = (205, 218, 196)
+E.HB = lambda s: _var(SP + "fonts/Manrope%5Bwght%5D.ttf", s, 700)
+_pill = E.pill_layer
+def _pill_olga(txt, size=50, fill=None, color=None, **k):
+    return _pill(txt, size, fill or E.CARD_CREAM, color or E.INK, **k)
+E.pill_layer = _pill_olga
+
+def _rose(r, base, seed):
+    import random; rnd = random.Random(seed)
+    im = Image.new("RGBA", (r * 4, r * 4), (0, 0, 0, 0)); c = r * 2
+    for i in range(9):
+        a = rnd.uniform(0, 6.28); d_ = rnd.uniform(0.15, 0.55) * r; rr = rnd.uniform(0.45, 0.75) * r
+        x, y = c + d_ * math.cos(a), c + d_ * math.sin(a)
+        col = tuple(max(0, min(255, v + rnd.randint(-14, 10))) for v in base)
+        lay = Image.new("RGBA", im.size, (0, 0, 0, 0))
+        ImageDraw.Draw(lay).ellipse((x - rr, y - rr * 0.85, x + rr, y + rr * 0.85), fill=col + (rnd.randint(130, 190),))
+        im.alpha_composite(lay.filter(ImageFilter.GaussianBlur(r * 0.08)))
+    d = ImageDraw.Draw(im)
+    dark = (int(base[0] * 0.86), int(base[1] * 0.66), int(base[2] * 0.66))
+    for i in range(4):
+        rr = r * (0.42 - i * 0.09)
+        d.arc((c - rr, c - rr, c + rr, c + rr), 30 + i * 70, 260 + i * 70, fill=dark + (150,), width=max(3, r // 18))
+    return im.filter(ImageFilter.GaussianBlur(1.2))
+
+def _leaf(length, ang, seed):
+    im = Image.new("RGBA", (length * 2, length * 2), (0, 0, 0, 0)); c = length
+    d = ImageDraw.Draw(im); w = length * 0.32
+    d.ellipse((c, c - w / 2, c + length, c + w / 2), fill=SAGE + (150,))
+    d.line((c, c, c + length, c), fill=tuple(int(v * 0.8) for v in SAGE) + (170,), width=3)
+    return im.rotate(ang, resample=Image.BICUBIC).filter(ImageFilter.GaussianBlur(1.5))
+
+def _decor():
+    lay = Image.new("RGBA", (E.W, E.H), (0, 0, 0, 0))
+    def bouquet(cx, cy, k, seed):
+        for i, (dx, dy, ang, L) in enumerate([(-150, 40, 200, 150), (120, -60, 20, 140), (40, 130, 300, 120), (-60, -140, 120, 110)]):
+            lf = _leaf(int(L * k), ang, seed + i); lay.alpha_composite(lf, (int(cx + dx * k - lf.width / 2), int(cy + dy * k - lf.height / 2)))
+        for i, (dx, dy, r, col) in enumerate([(0, 0, 120, BLUSH), (-130, 70, 80, PEACH), (110, 80, 70, (245, 212, 200))]):
+            ro = _rose(int(r * k), col, seed * 10 + i); lay.alpha_composite(ro, (int(cx + dx * k - ro.width / 2), int(cy + dy * k - ro.height / 2)))
+    bouquet(1000, 90, 1.0, 1); bouquet(60, 1860, 0.9, 2); bouquet(1040, 1880, 0.6, 3)
+    import random; rnd = random.Random(7)
+    paper = Image.new("L", (E.W // 4, E.H // 4)); paper.putdata([rnd.randint(0, 255) for _ in range(paper.width * paper.height)])
+    paper = paper.resize((E.W, E.H), Image.BICUBIC).filter(ImageFilter.GaussianBlur(2)).point(lambda v: int(abs(v - 128) * 0.12))
+    tex = Image.new("RGBA", (E.W, E.H), (150, 120, 100, 0)); tex.putalpha(paper)
+    out = Image.new("RGBA", (E.W, E.H), (0, 0, 0, 0)); out.alpha_composite(tex); out.alpha_composite(lay)
+    return out
+DECOR = None
+
 def _mono():
     o = Image.new("RGBA", (96, 96), (0, 0, 0, 0)); d = ImageDraw.Draw(o)
     d.ellipse((0, 0, 95, 95), fill=(246, 240, 230, 255)); d.ellipse((4, 4, 91, 91), fill=E.CARD_DARK + (255,))
@@ -122,6 +174,11 @@ def clip_layer(cid, t, w=CARD_W, h=CARD_H, off=0.0):
     return E.shadow_wrap(fr, 26, 20, 95)
 
 class OlgaVideo(E.Video):
+    def frame(self, t):
+        global DECOR
+        if DECOR is None: DECOR = _decor()
+        f = super().frame(t).convert("RGBA"); f.alpha_composite(DECOR)
+        return f.convert("RGB")
     def draw_el(self, f, el, lt, sdur, bg):
         k = el["k"]
         if k == "clip":
@@ -182,7 +239,7 @@ def voice(path):
 
 def make():
     a = SP + "audio/olga_magnij.wav"; voice(a)
-    return OlgaVideo(0, TEXT, a, SCENES, OUT + "olga_magnij.mp4")
+    return OlgaVideo(0, TEXT, a, SCENES, OUT + "olga_magnij_v2style.mp4")
 
 if __name__ == "__main__":
     v = make()
