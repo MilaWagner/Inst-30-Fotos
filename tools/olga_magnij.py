@@ -85,8 +85,8 @@ def mg_layer(lt):
 PRODUCT_PHOTO = SP + "product.png"   # сюда положить фото её продукта (PNG без фона)
 def jar_layer(lt, label="мой ритуал"):
     if os.path.exists(PRODUCT_PHOTO):
-        ph = Image.open(PRODUCT_PHOTO).convert("RGBA"); r = 560 / ph.height
-        return E.shadow_wrap(ph.resize((int(ph.width * r), 560), Image.LANCZOS), 24, 18, 80)
+        ph = Image.open(PRODUCT_PHOTO).convert("RGBA"); r = min(620 / ph.height, 640 / ph.width)
+        return E.shadow_wrap(ph.resize((int(ph.width * r), int(ph.height * r)), Image.LANCZOS), 24, 18, 80)
     W_, H_ = 420, 560; im = Image.new("RGBA", (W_, H_), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
     d.rounded_rectangle((60, 110, 360, 540), 60, fill=CREAM2 + (255,), outline=E.CARD_DARK + (255,), width=8)
     d.rounded_rectangle((90, 30, 330, 130), 30, fill=E.CARD_DARK + (255,))
@@ -163,11 +163,11 @@ SCENES = [
  dict(sents=(5, 7), bg=C, head=H([("Что делает ", 0), ("магний", 1)]),
       els=[{"k": "pills", "items": ["нормальная работа мышц", "меньше усталости"], "x": 540, "y": 690, "step": 130, "size": 46, "at": 0.1, "gap": 0.9}, {"k": "clip", "seq": [("36710", 99, 2.0)], "y": 1110, "h": 420, "ang": 2}]),
  dict(sents=(7, 8), bg=B, head=H([("Я слежу ", 0)], [("каждый день", 1)]),
-      els=[{"k": "pills", "items": ["утро", "мой ритуал"], "x": 290, "y": 820, "step": 170, "at": 0.05, "gap": 0.4}, {"k": "jar", "x": 760, "y": 1040, "ang": 4, "at": 0.2}]),
+      els=[{"k": "pills", "items": ["вечером", "перед сном"], "x": 290, "y": 820, "step": 170, "at": 0.05, "gap": 0.4}, {"k": "jar", "x": 700, "y": 1080, "ang": 4, "at": 0.2}]),
  dict(sents=(8, 9), bg=C, head=H([("Часто? ", 0), ("К врачу", 1)]),
       els=[{"k": "cards2", "a": ("часто", "сводит ноги"), "b": ("врач", "обязательно"), "y": 860, "at": 0.1}]),
  dict(sents=(9, 10), bg=B, head=H([("Напиши ", 0), ("МАГНИЙ", 1)]),
-      els=[{"k": "msg", "word": "МАГНИЙ", "y": 780, "at": 0.15}, {"k": "jar", "x": 540, "y": 1150, "s": 0.75, "ang": -3, "at": 0.6}]),
+      els=[{"k": "msg", "word": "МАГНИЙ", "y": 780, "at": 0.15}, {"k": "jar", "x": 540, "y": 1110, "s": 1.1, "ang": -3, "at": 0.6}]),
 ]
 
 def voice(path):
