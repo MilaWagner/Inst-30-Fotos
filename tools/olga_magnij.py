@@ -4,6 +4,8 @@ import os, sys, subprocess
 sys.path.insert(0, "/home/user/Inst-30-Fotos/tools")
 from PIL import Image, ImageDraw, ImageFont
 import slide_engine as E
+import math
+from PIL import ImageFilter
 
 SP = "/tmp/claude-0/-home-user-Inst-30-Fotos/c86b70d5-0211-5bc8-9062-180e9641e68c/scratchpad/"
 OUT = "/home/user/Inst-30-Fotos/videos/"
@@ -31,6 +33,85 @@ E.avatar = _mono
 def _no_whisper(*a, **k): raise FileNotFoundError
 E.whisper_align = _no_whisper
 
+
+# ---------- рисованные иллюстрации (без стоков) ----------
+RED = (196, 72, 62); CALM = (120, 160, 120); CREAM2 = (246, 240, 230)
+
+def _glow(size, col, r, a):
+    g = Image.new("RGBA", size, (0, 0, 0, 0)); d = ImageDraw.Draw(g)
+    cx, cy = size[0] // 2, size[1] // 2; d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=col + (a,))
+    return g.filter(ImageFilter.GaussianBlur(r * 0.4))
+
+def leg_layer(lt, calm=False):
+    W_, H_ = 760, 640; im = Image.new("RGBA", (W_, H_), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    pulse = 0.5 + 0.5 * math.sin(lt * (3 if calm else 9))
+    gc = CALM if calm else RED
+    g = _glow((560, 560), gc, 120, int(110 + 120 * pulse)); im.alpha_composite(g, (380 - 280, 350 - 280))
+    ink = E.CARD_DARK + (255,)
+    d.rounded_rectangle((40, 140, 400, 250), 55, fill=ink)                         # бедро
+    d.ellipse((330, 135, 450, 255), fill=ink)                                       # колено
+    d.polygon([(345, 210), (450, 200), (440, 470), (385, 480)], fill=ink)           # голень
+    d.ellipse((300, 240, 430, 440), fill=ink)                                       # икра (сзади)
+    d.rounded_rectangle((370, 450, 640, 525), 38, fill=ink)                         # стопа
+    d.ellipse((600, 455, 660, 520), fill=ink)
+    if not calm:
+        for i, (x, y, ang) in enumerate([(200, 280, 15), (210, 380, -10), (470, 300, 170)]):
+            if (lt * 3 + i * 0.33) % 1 > 0.6: continue
+            pts = [(0, 0), (34, 18), (14, 30), (52, 54), (24, 60), (70, 92)]
+            ca, sa = math.cos(math.radians(ang)), math.sin(math.radians(ang))
+            d.line([(x + px * ca - py * sa, y + px * sa + py * ca) for px, py in pts], fill=RED + (255,), width=12, joint="curve")
+    else:
+        for i in range(3):
+            y = 230 + i * 48 + math.sin(lt * 2 + i) * 8
+            d.arc((170, y, 290, y + 70), 120, 240, fill=CALM + (255,), width=9)
+    return E.shadow_wrap(im, 20, 14, 60)
+
+def mg_layer(lt):
+    S_ = 620; im = Image.new("RGBA", (S_, S_), (0, 0, 0, 0)); c = S_ // 2
+    im.alpha_composite(_glow((S_, S_), (214, 180, 150), 170, 120))
+    for j, rot in enumerate((25, -35, 85)):
+        orb = Image.new("RGBA", (S_, S_), (0, 0, 0, 0)); od = ImageDraw.Draw(orb)
+        od.ellipse((40, c - 95, S_ - 40, c + 95), outline=E.CARD_DARK + (200,), width=6)
+        a = lt * (1.6 + j * 0.4) + j * 2
+        ex, ey = c + (S_ / 2 - 40) * math.cos(a), c + 95 * math.sin(a)
+        od.ellipse((ex - 20, ey - 20, ex + 20, ey + 20), fill=(160, 108, 78, 255))
+        im.alpha_composite(orb.rotate(rot, resample=Image.BICUBIC))
+    d = ImageDraw.Draw(im)
+    d.ellipse((c - 130, c - 130, c + 130, c + 130), fill=E.CARD_DARK + (255,))
+    d.text((c, c - 6), "Mg", font=E.HB(120), fill=CREAM2, anchor="mm")
+    d.text((c + 70, c - 80), "12", font=E.HB(36), fill=(214, 180, 150), anchor="mm")
+    return im
+
+PRODUCT_PHOTO = SP + "product.png"   # сюда положить фото её продукта (PNG без фона)
+def jar_layer(lt, label="мой ритуал"):
+    if os.path.exists(PRODUCT_PHOTO):
+        ph = Image.open(PRODUCT_PHOTO).convert("RGBA"); r = 560 / ph.height
+        return E.shadow_wrap(ph.resize((int(ph.width * r), 560), Image.LANCZOS), 24, 18, 80)
+    W_, H_ = 420, 560; im = Image.new("RGBA", (W_, H_), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.rounded_rectangle((60, 110, 360, 540), 60, fill=CREAM2 + (255,), outline=E.CARD_DARK + (255,), width=8)
+    d.rounded_rectangle((90, 30, 330, 130), 30, fill=E.CARD_DARK + (255,))
+    d.rounded_rectangle((90, 250, 330, 420), 24, fill=(201, 170, 144, 255))
+    d.text((210, 305), "Mg", font=E.HB(72), fill=E.CARD_DARK, anchor="mm")
+    d.text((210, 380), label, font=E.HB(30), fill=E.CARD_DARK, anchor="mm")
+    for i in range(4):
+        a = lt * 1.5 + i * 1.57; x, y = 210 + 190 * math.cos(a), 300 + 230 * math.sin(a)
+        s_ = 10 + 6 * math.sin(lt * 4 + i)
+        d.polygon([(x, y - s_ * 2), (x + s_ / 2, y), (x, y + s_ * 2), (x - s_ / 2, y)], fill=(160, 108, 78, 255))
+    return E.shadow_wrap(im, 24, 18, 80)
+
+class OlgaVideo(E.Video):
+    def draw_el(self, f, el, lt, sdur, bg):
+        k = el["k"]
+        if k not in ("leg", "mg", "jar"): return super().draw_el(f, el, lt, sdur, bg)
+        t0 = 0.15 + el.get("at", 0.0); kk = E.back((lt - t0) / 0.5)
+        if kk <= 0.02: return
+        x, y = el.get("x", 540), el.get("y", 1050)
+        shake = math.sin(lt * 40) * 6 if (k == "leg" and not el.get("calm")) else 0
+        flo = math.sin(lt * 2.2) * 6
+        lay = {"leg": lambda: leg_layer(lt, el.get("calm", False)), "mg": lambda: mg_layer(lt),
+               "jar": lambda: jar_layer(lt)}[k]()
+        E.put(f, lay, x + shake, y + flo, kk * el.get("s", 1.0), angle=el.get("ang", 0))
+
 TEXT = ("Вечер. Ты наконец села отдохнуть, и снова сводит ногу. Знакомо? "
         "Причин может быть несколько: мало воды, мало движения, нехватка минералов. "
         "Один из таких минералов — магний. "
@@ -43,19 +124,19 @@ def H(*lines): return [list(l) for l in lines]
 B, C = "brown", "cream"
 SCENES = [
  dict(sents=(0, 3), bg=B, head=H([("Сводит ", 0), ("ноги", 1)], [("по вечерам?", 0)]),
-      els=[{"k": "pills", "items": ["вечер", "диван", "и снова судорога"], "x": 540, "y": 860, "step": 200, "size": 64, "at": 0.1, "gap": 0.5}]),
+      els=[{"k": "pills", "items": ["вечер, диван…"], "x": 330, "y": 760, "size": 54, "at": 0.0}, {"k": "leg", "x": 560, "y": 1080, "at": 0.3}]),
  dict(sents=(3, 4), bg=C, head=H([("Причин ", 0), ("несколько", 1)]),
       els=[{"k": "steps", "items": ["мало воды", "мало движения", "нехватка минералов"], "y": 760, "at": 0.05, "gap": 0.55}]),
  dict(sents=(4, 5), bg=B, head=H([("Один из них — ", 0)], [("магний", 1)]), hsize=110,
-      els=[{"k": "cards2", "a": ("Mg", "магний"), "b": ("мышцы", "и энергия"), "y": 860, "at": 0.1}]),
+      els=[{"k": "mg", "x": 540, "y": 1040, "at": 0.05}]),
  dict(sents=(5, 7), bg=C, head=H([("Что делает ", 0), ("магний", 1)]),
-      els=[{"k": "pills", "items": ["нормальная работа мышц", "меньше усталости"], "x": 540, "y": 860, "step": 210, "size": 58, "at": 0.1, "gap": 0.9}]),
+      els=[{"k": "pills", "items": ["нормальная работа мышц", "меньше усталости"], "x": 540, "y": 760, "step": 150, "size": 50, "at": 0.1, "gap": 0.9}, {"k": "leg", "calm": True, "x": 560, "y": 1160, "s": 0.85, "at": 0.4}]),
  dict(sents=(7, 8), bg=B, head=H([("Я слежу ", 0)], [("каждый день", 1)]),
-      els=[{"k": "steps", "items": ["утро", "мой ритуал", "каждый день"], "y": 760, "at": 0.05, "gap": 0.4}]),
+      els=[{"k": "pills", "items": ["утро", "мой ритуал"], "x": 290, "y": 820, "step": 170, "at": 0.05, "gap": 0.4}, {"k": "jar", "x": 760, "y": 1040, "ang": 4, "at": 0.2}]),
  dict(sents=(8, 9), bg=C, head=H([("Часто? ", 0), ("К врачу", 1)]),
       els=[{"k": "cards2", "a": ("часто", "сводит ноги"), "b": ("врач", "обязательно"), "y": 860, "at": 0.1}]),
  dict(sents=(9, 10), bg=B, head=H([("Напиши ", 0), ("МАГНИЙ", 1)]),
-      els=[{"k": "msg", "word": "МАГНИЙ", "y": 900, "at": 0.15}]),
+      els=[{"k": "msg", "word": "МАГНИЙ", "y": 780, "at": 0.15}, {"k": "jar", "x": 540, "y": 1150, "s": 0.75, "ang": -3, "at": 0.6}]),
 ]
 
 def voice(path):
@@ -65,7 +146,7 @@ def voice(path):
 
 def make():
     a = SP + "audio/olga_magnij.wav"; voice(a)
-    return E.Video(0, TEXT, a, SCENES, OUT + "olga_magnij.mp4")
+    return OlgaVideo(0, TEXT, a, SCENES, OUT + "olga_magnij.mp4")
 
 if __name__ == "__main__":
     v = make()
