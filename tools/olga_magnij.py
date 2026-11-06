@@ -261,7 +261,7 @@ def make():
     else: a = SP + "audio/olga_magnij.wav"; voice(a)
     return OlgaVideo(0, TEXT, a, SCENES, OUT + "olga_magnij_golos.mp4")
 
-if __name__ == "__main__" and not (len(sys.argv) > 1 and sys.argv[1] == "music"):
+if __name__ == "__main__" and not (len(sys.argv) > 1 and sys.argv[1] in ("music", "cover")):
     v = make()
     if len(sys.argv) > 1 and sys.argv[1] == "prev":
         ts = [(v.starts[i] + v.ends[i]) / 2 + 0.4 for i in range(len(v.scenes))]
@@ -283,3 +283,38 @@ def add_music(v, src, dst, music=MUSIC, vol=0.14):
 
 if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "music":
     v = make(); add_music(v, v.out, v.out.replace(".mp4", "_music.mp4"))
+
+# ---------- обложка (9:16, ключевое — в центральной зоне 3:4 для сетки профиля) ----------
+def cover(path_png):
+    global DECOR
+    if DECOR is None: DECOR = _decor()
+    W, H = E.W, E.H
+    f = Image.new("RGBA", (W, H), E.BG["cream"] + (255,))
+    f.alpha_composite(E.avatar(), (88, 300))
+    ImageDraw.Draw(f).text((200, 348), E.HANDLE, font=E.HB(40), fill=E.INK, anchor="lm")
+    y = 560
+    for line in [[("Сводит ", 0), ("ноги", 1)], [("по вечерам?", 0)]]:
+        size = 132; x = 88; d = ImageDraw.Draw(f)
+        for txt, it in line:
+            fnt = E.HI(size) if it else E.HB(size)
+            d.text((x, y), txt, font=fnt, fill=E.ITAL["cream"] if it else E.INK, anchor="ls"); x += E.text_w(txt, fnt)
+        y += 150
+    E.put(f, clip_layer("48618", 4.0, 640, 600), 400, 1060, 1.0, angle=-3)
+    E.put(f, jar_layer(0.0), 800, 1230, 0.62, angle=6)
+    E.put(f, E.pill_layer("магний: как пить", 50, E.CARD_DARK, (255, 252, 247)), 540, 1440, 1.0, angle=-2)
+    f.alpha_composite(DECOR)
+    im = f.convert("RGB"); im.save(path_png); im.save(path_png.replace(".png", ".jpg"), quality=92)
+    return path_png
+
+def with_cover(src, png, dst, secs=0.12):
+    """Ставит обложку первым кадром (≈0.12 с), чтобы превью было и там, где обложку не выбрать вручную."""
+    subprocess.check_call(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-t", f"{secs}", "-framerate", "25", "-i", png,
+        "-f", "lavfi", "-t", f"{secs}", "-i", "anullsrc=r=44100:cl=stereo", "-i", src, "-filter_complex",
+        "[0:v]scale=1080:1920,format=yuv420p,setsar=1[c];[2:v]format=yuv420p,setsar=1[m];[c][1:a][m][2:a]concat=n=2:v=1:a=1[v][a]",
+        "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-c:a", "aac", "-b:a", "192k",
+        "-movflags", "+faststart", dst]); print(dst)
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "cover":
+    png = cover(OUT + "olga_magnij_cover.png"); print(png)
+    src = OUT + "olga_magnij_golos_music.mp4"
+    if os.path.exists(src): with_cover(src, png, OUT + "olga_magnij_final.mp4")
