@@ -99,9 +99,40 @@ def jar_layer(lt, label="мой ритуал"):
         d.polygon([(x, y - s_ * 2), (x + s_ / 2, y), (x, y + s_ * 2), (x - s_ / 2, y)], fill=(160, 108, 78, 255))
     return E.shadow_wrap(im, 24, 18, 80)
 
+
+# ---------- стоковые клипы (Mixkit, бесплатная лицензия) ----------
+STOCK = SP + "stock/"
+CARD_W, CARD_H = 800, 600
+def _frames(cid, w, h):
+    d = STOCK + f"f_{cid}_{w}x{h}/"
+    if not os.path.isdir(d):
+        os.makedirs(d)
+        subprocess.run(["ffmpeg", "-loglevel", "error", "-i", STOCK + f"{cid}.mp4", "-vf",
+                        f"fps=25,scale={w}:{h}:force_original_aspect_ratio=increase:flags=lanczos,crop={w}:{h}", "-q:v", "3", d + "%04d.jpg"], check=True)
+    return sorted(os.listdir(d)), d
+_fc = {}
+def clip_layer(cid, t, w=CARD_W, h=CARD_H, off=0.0):
+    if (cid, w, h) not in _fc: _fc[(cid, w, h)] = _frames(cid, w, h)
+    fl, d = _fc[(cid, w, h)]
+    i = max(0, min(int((t + off) * 25), len(fl) - 1))
+    ph = Image.open(d + fl[i]).convert("RGBA")
+    bw = 14; fr = E.rrect((w + bw * 2, h + bw * 2), 44, (246, 240, 230, 255))
+    m = Image.new("L", (w, h), 0); ImageDraw.Draw(m).rounded_rectangle((0, 0, w - 1, h - 1), 32, fill=255)
+    fr.paste(ph, (bw, bw), m)
+    return E.shadow_wrap(fr, 26, 20, 95)
+
 class OlgaVideo(E.Video):
     def draw_el(self, f, el, lt, sdur, bg):
         k = el["k"]
+        if k == "clip":
+            kk = E.back((lt - 0.05) / 0.45)
+            if kk <= 0.02: return
+            seq = el["seq"]; cid, off = seq[0][0], seq[0][2]
+            for c, until, o in seq:
+                cid, off = c, o
+                if lt < until: break
+            E.put(f, clip_layer(cid, lt, el.get("w", CARD_W), el.get("h", CARD_H), off), el.get("x", 540), el.get("y", 1000), kk, angle=el.get("ang", 0))
+            return
         if k not in ("leg", "mg", "jar"): return super().draw_el(f, el, lt, sdur, bg)
         t0 = 0.15 + el.get("at", 0.0); kk = E.back((lt - t0) / 0.5)
         if kk <= 0.02: return
@@ -124,13 +155,13 @@ def H(*lines): return [list(l) for l in lines]
 B, C = "brown", "cream"
 SCENES = [
  dict(sents=(0, 3), bg=B, head=H([("Сводит ", 0), ("ноги", 1)], [("по вечерам?", 0)]),
-      els=[{"k": "pills", "items": ["вечер, диван…"], "x": 330, "y": 760, "size": 54, "at": 0.0}, {"k": "leg", "x": 560, "y": 1080, "at": 0.3}]),
+      els=[{"k": "clip", "seq": [("4548", 2.6, 1.0), ("48618", 99, -1.0)], "y": 1000, "ang": -2}]),
  dict(sents=(3, 4), bg=C, head=H([("Причин ", 0), ("несколько", 1)]),
       els=[{"k": "steps", "items": ["мало воды", "мало движения", "нехватка минералов"], "y": 760, "at": 0.05, "gap": 0.55}]),
  dict(sents=(4, 5), bg=B, head=H([("Один из них — ", 0)], [("магний", 1)]), hsize=110,
       els=[{"k": "mg", "x": 540, "y": 1040, "at": 0.05}]),
  dict(sents=(5, 7), bg=C, head=H([("Что делает ", 0), ("магний", 1)]),
-      els=[{"k": "pills", "items": ["нормальная работа мышц", "меньше усталости"], "x": 540, "y": 760, "step": 150, "size": 50, "at": 0.1, "gap": 0.9}, {"k": "leg", "calm": True, "x": 560, "y": 1160, "s": 0.85, "at": 0.4}]),
+      els=[{"k": "pills", "items": ["нормальная работа мышц", "меньше усталости"], "x": 540, "y": 690, "step": 130, "size": 46, "at": 0.1, "gap": 0.9}, {"k": "clip", "seq": [("36710", 99, 2.0)], "y": 1110, "h": 420, "ang": 2}]),
  dict(sents=(7, 8), bg=B, head=H([("Я слежу ", 0)], [("каждый день", 1)]),
       els=[{"k": "pills", "items": ["утро", "мой ритуал"], "x": 290, "y": 820, "step": 170, "at": 0.05, "gap": 0.4}, {"k": "jar", "x": 760, "y": 1040, "ang": 4, "at": 0.2}]),
  dict(sents=(8, 9), bg=C, head=H([("Часто? ", 0), ("К врачу", 1)]),
