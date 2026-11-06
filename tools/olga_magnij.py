@@ -261,10 +261,25 @@ def make():
     else: a = SP + "audio/olga_magnij.wav"; voice(a)
     return OlgaVideo(0, TEXT, a, SCENES, OUT + "olga_magnij_golos.mp4")
 
-if __name__ == "__main__":
+if __name__ == "__main__" and not (len(sys.argv) > 1 and sys.argv[1] == "music"):
     v = make()
     if len(sys.argv) > 1 and sys.argv[1] == "prev":
         ts = [(v.starts[i] + v.ends[i]) / 2 + 0.4 for i in range(len(v.scenes))]
         v.preview(ts, "olga_prev.jpg"); print([round(x, 1) for x in v.starts], round(v.dur, 1))
     else:
         v.render()
+
+# ---------- музыка и звуки (как в add_audio.py) ----------
+MUSIC = SP + "audio/music.mp3"   # её трек «Deep Liquid Bass» с Google Диска
+def add_music(v, src, dst, music=MUSIC, vol=0.14):
+    import add_audio as AA
+    sf = SP + "audio/olga_sfx.wav"; AA.sfx_wav(v, sf); tot = v.total
+    fc = (f"[1:a]aloop=loop=-1:size=2e9,atrim=0:{tot:.2f},volume={vol},afade=t=in:d=1.5,afade=t=out:st={tot-2.5:.2f}:d=2.5[m0];"
+          f"[0:a]asplit=2[vo][sc];[m0][sc]sidechaincompress=threshold=0.03:ratio=6:attack=30:release=500[m];"
+          f"[2:a]volume=0.55[fx];[vo][m][fx]amix=inputs=3:duration=first:normalize=0,alimiter=limit=0.95[a]")
+    subprocess.check_call(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-i", music, "-i", sf, "-filter_complex", fc,
+                           "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", dst])
+    print(dst)
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "music":
+    v = make(); add_music(v, v.out, v.out.replace(".mp4", "_music.mp4"))
