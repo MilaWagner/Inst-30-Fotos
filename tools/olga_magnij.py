@@ -82,7 +82,7 @@ def _mono():
     d.text((48, 50), "О", font=E.HI(56), fill=(214, 180, 150), anchor="mm")
     return o
 E.avatar = _mono
-VOICE_REC = SP + "audio/olga_voice_norm.wav"     # её запись (если есть)
+VOICE_REC = SP + "audio/olga_voice_clean.wav"     # её запись (если есть)
 WORDS_REC = SP + "olga_words.json"              # тайминги слов её записи (faster-whisper)
 import json, difflib
 def _align(num, words, fallback):
