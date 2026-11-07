@@ -1,5 +1,7 @@
 """Ольга (FitLine), ролик без лица «Магний и судороги» в стиле «видеослайд».
-Голос: офлайн-синтез Piper (ru_RU-irina-medium). Запуск: python3 -I olga_magnij.py [prev]"""
+Голос: её запись (если есть) или бесплатный офлайн Vosk TTS (vosk-model-tts-ru-0.9-multi).
+Тайминги слов — faster-whisper. Ресурсы: tools/olga_setup.sh.
+Запуск: python3 -I olga_magnij.py [prev|music|cover|all]"""
 import os, sys, subprocess
 sys.path.insert(0, "/home/user/Inst-30-Fotos/tools")
 from PIL import Image, ImageDraw, ImageFont
@@ -7,9 +9,11 @@ import slide_engine as E
 import math
 from PIL import ImageFilter
 
-SP = "/tmp/claude-0/-home-user-Inst-30-Fotos/c86b70d5-0211-5bc8-9062-180e9641e68c/scratchpad/"
+# папка ресурсов (шрифты, стоки, музыка, модели): переменная OLGA_SP или scratchpad текущей сессии
+SP = os.environ.get("OLGA_SP", "/tmp/claude-0/-home-user-Inst-30-Fotos/f7afa01d-6688-511a-924d-42314dcad80d/scratchpad/").rstrip("/") + "/"
 OUT = "/home/user/Inst-30-Fotos/videos/"
-VOICE = SP + "piper/ru_RU-irina-medium.onnx"
+VOSK_MODEL = SP + "models/vosk-model-tts-ru-0.9-multi"
+SPEAKER = int(os.environ.get("OLGA_SPEAKER", "2"))   # женские голоса Vosk: 0 / 1 / 2
 os.makedirs(OUT, exist_ok=True); os.makedirs(SP + "audio", exist_ok=True)
 
 # --- настройка движка под Ольгу: шрифты, без фото, монограмма вместо аватарки ---
@@ -82,12 +86,12 @@ def _mono():
     d.text((48, 50), "О", font=E.HI(56), fill=(214, 180, 150), anchor="mm")
     return o
 E.avatar = _mono
-VOICE_REC = SP + "audio/olga_voice_clean.wav"     # её запись (если есть)
-WORDS_REC = SP + "olga_words.json"              # тайминги слов её записи (faster-whisper)
+VOICE_REC = SP + "audio/olga_voice_clean.wav"     # её чистая запись (если есть) — приоритет над Vosk
 import json, difflib
+WORDS = None                                    # тайминги слов текущей озвучки (ставит make())
 def _align(num, words, fallback):
-    if not (os.path.exists(VOICE_REC) and os.path.exists(WORDS_REC)): raise FileNotFoundError
-    wh = [(a, b, w) for a, b, w in json.load(open(WORDS_REC)) if E._norm(w)]
+    if not (WORDS and os.path.exists(WORDS)): raise FileNotFoundError
+    wh = [(a, b, w) for a, b, w in json.load(open(WORDS)) if E._norm(w)]
     A = [E._norm(w) for w in words]; Bn = [E._norm(w[2]) for w in wh]
     start = [None] * len(words); end = [None] * len(words)
     for i, j, n in difflib.SequenceMatcher(None, A, Bn, autojunk=False).get_matching_blocks():
@@ -251,17 +255,56 @@ SCENES = [
       els=[{"k": "msg", "word": "ХОЧУ", "y": 780, "at": 0.15}, {"k": "jar", "x": 540, "y": 1190, "s": 0.95, "ang": -3, "at": 0.6}]),
 ]
 
-def voice(path):
-    if os.path.exists(path): return
-    subprocess.run([sys.executable, "-m", "piper", "-m", VOICE, "-f", path, "--sentence-silence", "0.35", "--length-scale", "1.05"],
-                   input=TEXT.encode(), check=True)
+# Текст для озвучки: «+» перед ударной гласной, «...» и «-» — паузы, «?» — вопросы, цифры словами.
+# Без «» и длинных тире. Субтитры берутся из TEXT.
+TEXT_VOICE = ("Вечер... Ты наконец с+ела отдохн+уть - и снова сводит н+огу. Знакомо? "
+        "Причин может быть несколько: мало воды, мало движения, нехватка минералов. "
+        "Один из важных минералов... это магний. "
+        "Он способствует нормальной работе мышц и уменьшению усталости. "
+        "И нужен для нормального состояния костей и зубов. "
+        "Пить его просто: один пакетик порошка развести в стакане воды и выпить маленькими глотками. "
+        "Идеально - вечером, перед сном. "
+        "Если судороги частые, обязательно покажись врачу. "
+        "Хочешь магний, который доставляет питательные вещества прямо к клеткам? "
+        "Напиши слово хочу! И я пришлю ссылку.")
+
+def vosk_voice(text, path, speaker=None):
+    """Бесплатный офлайн-синтез Vosk; результат кешируется (удали файл, чтобы пересинтезировать)."""
+    if os.path.exists(path): return path
+    from vosk_tts import Model, Synth
+    raw = path.replace(".wav", "_raw.wav")
+    Synth(Model(model_path=VOSK_MODEL)).synth(text, raw, speaker_id=SPEAKER if speaker is None else speaker)
+    subprocess.check_call(["ffmpeg", "-y", "-loglevel", "error", "-i", raw, "-af",
+                           "apad=pad_dur=0.4,loudnorm=I=-16:TP=-1.5:LRA=11", "-ar", "44100", "-ac", "1", path])
+    os.remove(raw); return path
+
+def whisper_words(audio, path):
+    """Тайминги слов озвучки (faster-whisper small). В модель — numpy-массив, не путь (несовместимость av)."""
+    if os.path.exists(path) and os.path.getmtime(path) >= os.path.getmtime(audio): return path
+    import numpy as np
+    from faster_whisper import WhisperModel
+    raw = subprocess.check_output(["ffmpeg", "-loglevel", "error", "-i", audio, "-f", "s16le", "-ac", "1", "-ar", "16000", "-"])
+    x = np.frombuffer(raw, np.int16).astype(np.float32) / 32768
+    segs, _ = WhisperModel("small", device="cpu", compute_type="int8").transcribe(x, language="ru", word_timestamps=True)
+    json.dump([(w.start, w.end, w.word.strip()) for sg in segs for w in sg.words], open(path, "w"), ensure_ascii=False)
+    return path
+
+def clean_rec(src, dst):
+    """Чистка её записи с телефона: highpass, RNNoise, afftdn, agate, loudnorm."""
+    af = (f"highpass=f=80,arnndn=m={SP}models/sh.rnnn,afftdn=nf=-25,"
+          "agate=threshold=0.02:ratio=2:attack=5:release=150,loudnorm=I=-16:TP=-1.5:LRA=11")
+    subprocess.check_call(["ffmpeg", "-y", "-loglevel", "error", "-i", src, "-af", af, "-ar", "44100", "-ac", "1", dst]); return dst
+
+def narration(name, text_voice):
+    """Голос ролика: её чистая запись, если есть, иначе Vosk. Возвращает путь и ставит WORDS."""
+    global WORDS
+    a = VOICE_REC if os.path.exists(VOICE_REC) else vosk_voice(text_voice, SP + f"audio/{name}_vosk{SPEAKER}.wav")
+    WORDS = whisper_words(a, a.replace(".wav", "_words.json")); return a
 
 def make():
-    if os.path.exists(VOICE_REC): a = VOICE_REC
-    else: a = SP + "audio/olga_magnij.wav"; voice(a)
-    return OlgaVideo(0, TEXT, a, SCENES, OUT + "olga_magnij_golos.mp4")
+    return OlgaVideo(0, TEXT, narration("olga_magnij", TEXT_VOICE), SCENES, OUT + "olga_magnij_golos.mp4")
 
-if __name__ == "__main__" and not (len(sys.argv) > 1 and sys.argv[1] in ("music", "cover")):
+if __name__ == "__main__" and not (len(sys.argv) > 1 and sys.argv[1] in ("music", "cover", "all")):
     v = make()
     if len(sys.argv) > 1 and sys.argv[1] == "prev":
         ts = [(v.starts[i] + v.ends[i]) / 2 + 0.4 for i in range(len(v.scenes))]
@@ -318,3 +361,8 @@ if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "cover":
     png = cover(OUT + "olga_magnij_cover.png"); print(png)
     src = OUT + "olga_magnij_golos_music.mp4"
     if os.path.exists(src): with_cover(src, png, OUT + "olga_magnij_final.mp4")
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "all":
+    v = make(); v.render()
+    mus = v.out.replace(".mp4", "_music.mp4"); add_music(v, v.out, mus)
+    with_cover(mus, cover(OUT + "olga_magnij_cover.png"), OUT + "olga_magnij_final.mp4")
