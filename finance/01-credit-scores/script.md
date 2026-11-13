@@ -1,6 +1,6 @@
 # 01 — How Credit Scores Actually Work
 
-Канал: англоязычный, финансы, без лица. Формат: YouTube 16:9. Сейчас ~1000 слов ≈ 7 минут голосом (150 слов/мин). Для рекламы в середине ролика нужно от 8 минут — либо дописать ~250 слов, либо голос медленнее. Время в разделах — ориентир, точное будет после озвучки. Голос: английский мужской (синтетический).
+Канал: англоязычный, финансы, без лица. Формат: YouTube 16:9. Текст ~1300 слов ≈ 8,5–9 минут голосом (150 слов/мин) — проходит порог 8 минут для рекламы в середине. Время в разделах — ориентир, точное будет после озвучки. Голос: английский мужской (синтетический).
 Ниже каждый абзац: **EN** — то, что читает голос, *RU* — перевод для тебя.
 
 ## Название (варианты)
@@ -114,7 +114,29 @@ For educational purposes only. This is not financial, legal or credit advice.
 
 *RU: Пятое: разнообразие кредитов. Моделям нравится видеть, что ты справляешься с разными видами кредита — например, с кредиткой и с кредитом с фиксированными платежами, как автокредит. Но это самый маленький фактор. Никогда не бери ненужный кредит только ради разнообразия.*
 
-### 8. Что проверить прямо сейчас (7:30–8:30)
+### 7а. Три мифа (7:30–8:45)
+
+**EN:** Before we get practical, let's clear up three myths that cost people real money.
+
+*RU: Прежде чем перейти к практике, разберём три мифа, которые стоят людям реальных денег.*
+
+**EN:** Myth number one: a high income means a high credit score. It doesn't. FICO says your income is not part of your FICO Score at all. Neither is your job title, your employer, your age, or where you live. A lender may ask about your income when you apply — but the score itself never sees your salary. That's why someone earning a modest salary can have a better score than a high earner who pays late.
+
+*RU: Миф номер один: высокий доход — значит высокий рейтинг. Нет. По словам FICO, доход вообще не входит в FICO Score. Как и должность, работодатель, возраст или место жительства. Кредитор может спросить о доходе при подаче заявки — но сам рейтинг твою зарплату не видит. Поэтому человек со скромной зарплатой может иметь рейтинг выше, чем тот, кто зарабатывает много, но платит с опозданием.*
+
+**EN:** Myth number two: checking your own score will lower it. It won't. When you check your own credit, that's a soft inquiry, and soft inquiries are not part of your FICO Score. Avoiding your own credit report doesn't protect you — it just means you find problems later.
+
+*RU: Миф номер два: если проверять свой рейтинг, он упадёт. Не упадёт. Проверка собственной истории — это мягкий запрос, а мягкие запросы в FICO Score не учитываются. Если избегать своего отчёта, это не защищает — просто проблемы найдёшь позже.*
+
+**EN:** Myth number three: there is one official credit score. As we saw, there are many versions, built on reports from three different bureaus. So don't panic if two apps show two different numbers. Focus on the habits that move all of them in the same direction.
+
+*RU: Миф номер три: существует один официальный кредитный рейтинг. Как мы видели, версий много, и считаются они по отчётам трёх разных бюро. Поэтому не паникуй, если два приложения показывают два разных числа. Сосредоточься на привычках, которые двигают их все в одну сторону.*
+
+**EN:** And remember our two people from the beginning, same salary, different rates? Now you know: the difference wasn't income. It was payment history, balances, and time.
+
+*RU: И помнишь двух людей из начала — одинаковая зарплата, разные ставки? Теперь ты знаешь: разница была не в доходе. Она была в истории платежей, балансах и времени.*
+
+### 8. Что проверить прямо сейчас (8:45–9:30)
 
 **EN:** So, what can you do this week? First: get your credit reports. In the US, you can get free weekly reports from all three bureaus at AnnualCreditReport.com. That's the official site. The reports don't include your score, but they show what your score is built from.
 
@@ -128,7 +150,7 @@ For educational purposes only. This is not financial, legal or credit advice.
 
 *RU: Третье: настрой автоплатёж. Четвёртое: следи за загрузкой лимита до даты выписки. И пятое: подумай, прежде чем закрывать старые счета или открывать сразу несколько новых.*
 
-### 9. Итог и призыв (8:30–9:00)
+### 9. Итог и призыв (9:30–10:00)
 
 **EN:** Let's recap. Pay on time — that's 35 percent. Keep your balances low — that's 30. Let your history grow. Apply for new credit only when you need it. And don't chase credit mix. None of this is fast. But it's simple, and it compounds.
 
@@ -168,7 +190,11 @@ For educational purposes only. This is not financial, legal or credit advice.
 | 22 | 6:20 | 2 года / 12 месяцев | две шкалы: «on report ~2 yrs», «FICO counts 12 months» |
 | 23 | 6:45 | мягкий запрос | человек смотрит в телефон, «Soft inquiry — no impact» |
 | 24 | 7:00 | разнообразие | карта + автомобиль, «only 10%» |
-| 25 | 7:30 | AnnualCreditReport.com | браузерное окно с адресом сайта (текст, без копии интерфейса) |
+| 24а | 7:30 | миф 1: доход | зарплата крупно → перечёркнута, рядом «not in your FICO Score» |
+| 24б | 7:55 | миф 2: проверка | телефон с рейтингом, значок «soft inquiry — no impact» |
+| 24в | 8:15 | миф 3: один рейтинг | два приложения с разными числами, стрелки обоих вверх |
+| 24г | 8:30 | возврат к хуку | две фигуры из сцены 1, под ними: payment history · balances · time |
+| 25 | 8:45 | AnnualCreditReport.com | браузерное окно с адресом сайта (текст, без копии интерфейса) |
 | 26 | 7:55 | ищи ошибки | отчёт, одна строка подсвечена «Error?» → «Dispute» |
 | 27 | 8:15 | чек-лист | 5 пунктов появляются по одному |
 | 28 | 8:30 | итог | диаграмма из сцены 9 снова, доли подсвечиваются по очереди |
@@ -182,6 +208,7 @@ Shorts из этого ролика (вертикальные нарезки): �
 - ~4% загрузки у людей с 850: [myFICO — Credit score fun facts](https://www.myfico.com/credit-education/blog/credit-score-fun-facts); Experian даёт близкую цифру ~4%: [Experian — credit utilization](https://www.experian.com/blogs/ask-experian/what-should-my-credit-card-utilization-be/)
 - FICO учитывает только жёсткие запросы за последний год: myFICO (там же)
 - Негатив обычно до 7 лет, достоверный негатив нельзя удалить: [CFPB — how long does negative information remain](https://www.consumerfinance.gov/ask-cfpb/how-long-do-negative-information-remain-on-my-credit-report-en-323/)
+- Доход, работа, возраст, место жительства не входят в FICO Score: [myFICO — What's not in my FICO Scores](https://www.myfico.com/credit-education/whats-not-in-your-credit-score)
 - Бесплатные еженедельные отчёты навсегда, официальный сайт: [FTC — permanent free weekly credit reports](https://consumer.ftc.gov/consumer-alerts/2023/10/you-now-have-permanent-access-free-weekly-credit-reports)
 
 Проверить ещё раз перед озвучкой (подтверждено только вторичными источниками):
