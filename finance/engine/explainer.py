@@ -377,7 +377,7 @@ def b_checklist(c, p):
     text(c, (960, 140), p.get("head", "This week"), 62, INK, "Bold", "ma", c.a(), disp=True)
     items = p["items"]; step = p.get("step", 1.6)
     for i, s in enumerate(items):
-        y = 250 + i * 118; a = c.a(i * step)
+        y = 250 + i * 118; a = c.a(p["tm"][i] if "tm" in p else i * step)
         check(c, 520, y + 40, 34, a, True)
         text(c, (590, y + 40), s, 50, INK, "SemiBold", "lm", a)
 
@@ -502,6 +502,62 @@ def b_payoff(c, p):
         text(c, (1640, y + 90), intr, 56, col, "Bold", "rm", a, disp=True)
     text(c, (960, 860), "Simplified example: no new purchases or fees", 28, MUTED, "Medium", "ma", 1)
 
+
+# ---------- общие биты: рост, столбики, страны ----------
+def b_growth(c, p):
+    text(c, (960, 120), p.get("head", "$200 a month at 7% a year"), 58, INK, "Bold", "ma", c.a(), disp=True)
+    x0, x1, y0, y1 = 300, 1620, 230, 780; maxv = p.get("max", 540000)
+    al = c.a(.2); c.d.line([(x0, y1), (x1, y1)], fill=fade(LINE, al), width=4)
+    for k, lab in ((0, "25"), (0.25, "35"), (0.5, "45"), (0.75, "55"), (1, "65")):
+        text(c, (x0 + k * (x1 - x0), y1 + 20), lab, 30, MUTED, "Medium", "ma", al)
+    text(c, (x1, y1 + 60), "age", 28, MUTED, "Medium", "ra", al)
+    for start, col, delay in p["lines"]:
+        col = tuple(col)
+        pts = []; b = 0.0
+        for m in range(480):
+            if m >= (start - 25) * 12: b = b * (1 + .07 / 12) + 200
+            if m % 6 == 0: pts.append((x0 + m / 480 * (x1 - x0), y1 - b / maxv * (y1 - y0)))
+        n = int(len(pts) * clamp((c.lt - delay) / 3.0))
+        if n > 1: c.d.line(pts[:n], fill=col, width=9, joint="curve")
+        if n == len(pts):
+            below = start > 25
+            if below: text(c, (x0 + 20, y0 + 40), f"start at {start}: ~${round(b / 1000)}k", 38, col, "Bold", "la", 1)
+            else: text(c, (x1 - 10, pts[-1][1] - 50), f"start at {start}: ~${round(b / 1000)}k", 38, col, "Bold", "ra", 1)
+    if p.get("contrib"):
+        a = c.a(p["contrib"]); y = y1 - 96000 / maxv * (y1 - y0)
+        c.d.line([(x0, y), (x1, y)], fill=fade(MUTED, a), width=3)
+        text(c, (x0 + 10, y - 44), "you put in $96k", 32, MUTED, "Bold", "la", a)
+    text(c, (960, 870), "Example, not a promise: returns vary and can be negative", 28, MUTED, "Medium", "ma", c.a(1))
+
+def b_bars(c, p):
+    text(c, (960, 130), p["head"], 58, INK, "Bold", "ma", c.a(), disp=True)
+    mx = max(r[1] for r in p["rows"])
+    for i, (lab, v, disp, col) in enumerate(p["rows"]):
+        y = 290 + i * 190; a = c.a(.3 + i * p.get("step", 1.0)); w = 1050 * v / mx * ease((c.lt - .3 - i * p.get("step", 1.0)) / 1.2)
+        text(c, (300, y), lab, 42, INK, "SemiBold", "la", a)
+        if w > 30: rrect(c, (300, y + 60, 300 + w, y + 140), 22, tuple(col), a)
+        text(c, (320 + w, y + 100), disp, 46, tuple(col), "Bold", "lm", a, disp=True)
+    if p.get("note"): text(c, (960, 870), p["note"], 28, MUTED, "Medium", "ma", c.a(1))
+
+def b_countries(c, p):
+    text(c, (960, 110), "Tax-advantaged accounts", 58, INK, "Bold", "ma", c.a(), disp=True)
+    rows = [("United States", "401(k)  ·  IRA"), ("United Kingdom", "Stocks & Shares ISA  ·  pension"),
+            ("Canada", "TFSA  ·  RRSP"), ("Australia", "Superannuation")]
+    for i, (cn, acc) in enumerate(rows):
+        y = 210 + i * 150; a = c.a(p["tm"][i] if "tm" in p else i)
+        off = card(c, (300, y, 1620, y + 120), a, 26)
+        text(c, (350, y + 60 + off), cn, 46, INK, "Bold", "lm", a)
+        text(c, (1580, y + 60 + off), acc, 42, ACC, "Bold", "rm", a)
+    text(c, (960, 840), "Rules and limits change: check your government's official website", 30, MUTED, "Medium", "ma", c.a(4))
+
+def b_twocol(c, p):
+    text(c, (960, 130), p["head"], 58, INK, "Bold", "ma", c.a(), disp=True)
+    for i, (title, items, col) in enumerate(p["cols"]):
+        x = 300 + i * 680; a = c.a(.4 + i * p.get("step", 1.5)); off = card(c, (x, 250, x + 640, 800), a, 34)
+        rrect(c, (x, 250 + off, x + 640, 350 + off), 34, tuple(col), a); c.d.rectangle((x, 310 + off, x + 640, 350 + off), fill=fade(tuple(col), a))
+        text(c, (x + 320, 300 + off), title, 48, CARD, "Bold", "mm", a)
+        for k, s in enumerate(items): text(c, (x + 50, 420 + off + k * 90), "• " + s, 42, INK, "SemiBold", "la", a)
+
 BEATS = {k[2:]: v for k, v in globals().items() if k.startswith("b_")}
 
 # ---------- субтитры / тайминг ----------
@@ -526,7 +582,14 @@ def build_timeline(ep, audio_dir):
         for b in sec["beats"]:
             key = b["at"]; pos = 0 if key == "^" else txt.find(key)
             if pos < 0: raise SystemExit(f"key not found in section {i}: {key}")
-            beats.append((t + d * pos / L, b))
+            bt = t + d * pos / L
+            if "marks" in b:
+                b = dict(b); b["tm"] = []
+                for mk in b["marks"]:
+                    mp = txt.find(mk)
+                    if mp < 0: raise SystemExit(f"mark not found in section {i}: {mk}")
+                    b["tm"].append(t + d * mp / L - bt)
+            beats.append((bt, b))
         subs, cpos = [], 0
         for ch in sub_chunks(txt):
             p = txt.find(ch, cpos); cpos = p + len(ch)
@@ -599,10 +662,16 @@ def main(ep_path, audio_dir, out, stills=None):
     for i, s in enumerate(secs):
         inputs += ["-i", s["file"]]
         flt.append(f"[{i}:a]aresample=44100,adelay={int(s['start'] * 1000)}|{int(s['start'] * 1000)}[a{i}]")
-    flt.append("".join(f"[a{i}]" for i in range(len(secs))) + f"amix=inputs={len(secs)}:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11[out]")
-    voice = os.path.join(work, "voice.wav")
+    flt.append("".join(f"[a{i}]" for i in range(len(secs))) + f"amix=inputs={len(secs)}:normalize=0,acompressor=threshold=-22dB:ratio=3:attack=5:release=120:makeup=2,alimiter=limit=0.7[out]")
+    voice0 = os.path.join(work, "voice0.wav"); voice = os.path.join(work, "voice.wav")
     subprocess.check_call(["ffmpeg", "-y", "-loglevel", "error", *inputs, "-filter_complex", ";".join(flt),
-                           "-map", "[out]", "-t", f"{total:.2f}", "-ar", "48000", voice])
+                           "-map", "[out]", "-t", f"{total:.2f}", "-ar", "48000", voice0])
+    meas = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", voice0, "-af", "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json",
+                           "-f", "null", "-"], capture_output=True, text=True).stderr
+    m = json.loads(meas[meas.rfind("{"):meas.rfind("}") + 1])
+    ln = (f"loudnorm=I=-14:TP=-1.5:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"
+          f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
+    subprocess.check_call(["ffmpeg", "-y", "-loglevel", "error", "-i", voice0, "-af", ln, "-ar", "48000", voice])
     subprocess.check_call(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", os.path.join(work, "parts.txt"),
                            "-i", voice, "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest", out])
     print("done", out, f"{total:.1f}s")
