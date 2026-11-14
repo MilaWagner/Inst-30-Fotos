@@ -531,9 +531,19 @@ def b_growth(c, p):
 
 def b_bars(c, p):
     text(c, (960, 130), p["head"], 58, INK, "Bold", "ma", c.a(), disp=True)
-    mx = max(r[1] for r in p["rows"])
+    mx = p.get("max") or max(r[1] for r in p["rows"]); sh = p.get("shown", 0)
+    if len(p["rows"]) > 4 or p.get("compact"):  # компактный режим: подпись слева, полоса справа
+        for i, (lab, v, disp, col) in enumerate(p["rows"]):
+            dl = 0 if i < sh else .3 + (i - sh) * p.get("step", 1.0)
+            y = 250 + i * 100; a = 1.0 if i < sh else c.a(dl); w = 900 * v / mx * (1 if i < sh else ease((c.lt - dl) / 1.2))
+            text(c, (300, y + 40), lab, 40, INK, "SemiBold", "lm", a)
+            if w > 30: rrect(c, (560, y + 10, 560 + w, y + 70), 18, tuple(col), a)
+            text(c, (580 + w, y + 40), disp, 42, tuple(col), "Bold", "lm", a, disp=True)
+        if p.get("note"): text(c, (960, 870), p["note"], 28, MUTED, "Medium", "ma", c.a(1))
+        return
     for i, (lab, v, disp, col) in enumerate(p["rows"]):
-        y = 290 + i * 190; a = c.a(.3 + i * p.get("step", 1.0)); w = 1050 * v / mx * ease((c.lt - .3 - i * p.get("step", 1.0)) / 1.2)
+        dl = 0 if i < sh else .3 + (i - sh) * p.get("step", 1.0)
+        y = 290 + i * 190; a = 1.0 if i < sh else c.a(dl); w = 1050 * v / mx * (1 if i < sh else ease((c.lt - dl) / 1.2))
         text(c, (300, y), lab, 42, INK, "SemiBold", "la", a)
         if w > 30: rrect(c, (300, y + 60, 300 + w, y + 140), 22, tuple(col), a)
         text(c, (320 + w, y + 100), disp, 46, tuple(col), "Bold", "lm", a, disp=True)

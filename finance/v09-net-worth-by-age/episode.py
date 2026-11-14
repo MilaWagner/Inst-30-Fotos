@@ -237,6 +237,9 @@ SECTIONS = [
       ]
      ]
     ],
+    "shown": 1,
+    "compact": True,
+    "max": 505,
     "note": "Source: Federal Reserve, Survey of Consumer Finances 2025 (2025 dollars)"
    },
    {
@@ -293,6 +296,9 @@ SECTIONS = [
       ]
      ]
     ],
+    "shown": 2,
+    "compact": True,
+    "max": 505,
     "note": "Source: Federal Reserve, Survey of Consumer Finances 2025 (2025 dollars)"
    }
   ]
@@ -348,6 +354,9 @@ SECTIONS = [
       ]
      ]
     ],
+    "shown": 3,
+    "compact": True,
+    "max": 505,
     "note": "Source: Federal Reserve, Survey of Consumer Finances 2025 (2025 dollars)"
    },
    {
@@ -371,7 +380,7 @@ SECTIONS = [
     "at": "^",
     "type": "bars",
     "head": "Median net worth by age",
-    "step": 0.8,
+    "step": 5.0,
     "rows": [
      [
       "Under 35",
@@ -434,6 +443,9 @@ SECTIONS = [
       ]
      ]
     ],
+    "shown": 4,
+    "compact": True,
+    "max": 505,
     "note": "Source: Federal Reserve, Survey of Consumer Finances 2025 (2025 dollars)"
    },
    {
