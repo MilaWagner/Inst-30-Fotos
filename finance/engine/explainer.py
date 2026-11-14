@@ -535,10 +535,11 @@ def b_bars(c, p):
     if len(p["rows"]) > 4 or p.get("compact"):  # компактный режим: подпись слева, полоса справа
         for i, (lab, v, disp, col) in enumerate(p["rows"]):
             dl = 0 if i < sh else .3 + (i - sh) * p.get("step", 1.0)
-            y = 250 + i * 100; a = 1.0 if i < sh else c.a(dl); w = 900 * v / mx * (1 if i < sh else ease((c.lt - dl) / 1.2))
+            lw = p.get("lw", 260); bx = 300 + lw
+            y = 250 + i * 100; a = 1.0 if i < sh else c.a(dl); w = (1160 - lw) * v / mx * (1 if i < sh else ease((c.lt - dl) / 1.2))
             text(c, (300, y + 40), lab, 40, INK, "SemiBold", "lm", a)
-            if w > 30: rrect(c, (560, y + 10, 560 + w, y + 70), 18, tuple(col), a)
-            text(c, (580 + w, y + 40), disp, 42, tuple(col), "Bold", "lm", a, disp=True)
+            if w > 30: rrect(c, (bx, y + 10, bx + w, y + 70), 18, tuple(col), a)
+            text(c, (bx + 20 + w, y + 40), disp, 42, tuple(col), "Bold", "lm", a, disp=True)
         if p.get("note"): text(c, (960, 870), p["note"], 28, MUTED, "Medium", "ma", c.a(1))
         return
     for i, (lab, v, disp, col) in enumerate(p["rows"]):

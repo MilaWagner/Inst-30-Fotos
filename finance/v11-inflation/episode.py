@@ -170,6 +170,7 @@ SECTIONS = [
      ]
     ],
     "compact": True,
+    "lw": 560,
     "note": "Sources: BLS, ONS, Statistics Canada, ABS"
    },
    {
