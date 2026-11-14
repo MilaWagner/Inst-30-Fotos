@@ -6,6 +6,8 @@
 import json, math, os, re, subprocess, sys, importlib.util
 from multiprocessing import Pool
 from PIL import Image, ImageDraw, ImageFont
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import character
 
 W, H, FPS = 1920, 1080, 25
 GAP = 0.7  # пауза между разделами, с
@@ -382,12 +384,123 @@ def b_checklist(c, p):
 def b_subscribe(c, p):
     text(c, (960, 180), "Next video", 40, ACC, "Bold", "ma", c.a())
     al = c.a(.2); off = card(c, (460, 260, 1460, 640), al, 36)
-    for i, ln in enumerate(wrap("How credit card interest really works", 70, 860, "Bold")):
+    for i, ln in enumerate(wrap(p.get("next", "How credit card interest really works"), 70, 860, "Bold")):
         text(c, (960, 330 + off + i * 86), ln, 70, INK, "Bold", "ma", al, disp=True)
-    text(c, (960, 560 + off), "+ why the minimum payment is a trap", 40, MUTED, "Medium", "ma", al)
+    text(c, (960, 560 + off), p.get("next_sub", "+ why the minimum payment is a trap"), 40, MUTED, "Medium", "ma", al)
     a2 = c.a(1.2); pulse = 1 + .04 * math.sin(c.lt * 4) * (a2 >= 1)
     w = 260 * pulse; rrect(c, (960 - w, 740, 960 + w, 850), 55, RED, a2)
     text(c, (960, 795), "SUBSCRIBE", 54, CARD, "Bold", "mm", a2)
+
+
+# ---------- биты с персонажем и для темы «проценты по картам» ----------
+def b_say(c, p):
+    al = c.a(.3); x0, y0, x1 = 820, 260, 1700
+    lines = wrap(p["text"], 58, x1 - x0 - 120, "Bold")
+    subl = wrap(p["sub"], 38, x1 - x0 - 120, "Bold") if p.get("sub") else []
+    y1 = y0 + 90 + len(lines) * 74 + len(subl) * 52 + (14 if subl else 0)
+    off = card(c, (x0, y0, x1, y1), al, 40)
+    c.d.polygon([(x0 + 2, y0 + 150 + off), (x0 - 70, y0 + 200 + off), (x0 + 2, y0 + 210 + off)], fill=fade(CARD, al))
+    for i, ln in enumerate(lines): text(c, (x0 + 60, y0 + 50 + off + i * 74), ln, 58, INK, "Bold", "la", al, disp=True)
+    for i, ln in enumerate(subl): text(c, (x0 + 60, y0 + 64 + off + len(lines) * 74 + i * 52), ln, 38, ACC, "Bold", "la", c.a(.8))
+
+def b_debtcard(c, p):
+    al = c.a(.2); rrect(c, (820, 300, 1560, 740), 44, INK, al)
+    rrect(c, (900, 400, 1010, 480), 14, GOLD, al)
+    text(c, (900, 560), "Balance", 36, (170, 180, 200), "Medium", "la", al)
+    text(c, (900, 600), p.get("bal", "$5,000"), 96, CARD, "Bold", "la", c.a(.4), disp=True)
+    text(c, (1480, 400), p.get("apr", "22% APR"), 44, GOLD, "Bold", "ra", c.a(.7))
+    text(c, (1190, 800), p.get("sub", "Paying only the minimum"), 44, INK, "Bold", "ma", c.a(1.2))
+
+def b_lines(c, p):
+    text(c, (960, 150), p["head"], 60, INK, "Bold", "ma", c.a(), disp=True)
+    y = 300; step = p.get("step", 1.2)
+    for i, ln in enumerate(p["lines"]):
+        ln = ln if isinstance(ln, list) else [ln]
+        s = ln[0]; size = next((x for x in ln[1:] if isinstance(x, int)), 64); col = INK
+        text(c, (960, y), s, size, col, "Bold", "ma", c.a(.3 + i * step), disp=True)
+        y += size + 54
+    if p.get("note"): text(c, (960, 860), p["note"], 30, MUTED, "Medium", "ma", c.a(1))
+
+def b_compound(c, p):
+    text(c, (960, 150), "Interest on interest", 62, INK, "Bold", "ma", c.a(), disp=True)
+    n = 8; base = 1.0; x0 = 360; bw = 120; y1 = 800
+    for i in range(n):
+        a = c.a(.3 + i * .35, .4)
+        if a <= 0: break
+        tot = base * (1.12 ** i); h0 = 300 * base; h1 = 300 * tot
+        x = x0 + i * 160
+        rrect(c, (x, y1 - h0 * a, x + bw, y1), 10, BLUE, a)
+        if i: c.d.rectangle((x, y1 - h1 * a, x + bw, y1 - h0 * a + 10), fill=fade(RED, a))
+    rrect(c, (380, 860, 420, 890), 8, BLUE, c.a(1)); text(c, (440, 875), "what you borrowed", 32, INK, "Medium", "lm", c.a(1))
+    rrect(c, (900, 860, 940, 890), 8, RED, c.a(1)); text(c, (960, 875), "interest added to the balance", 32, INK, "Medium", "lm", c.a(1))
+    text(c, (1700, 150), "illustration", 26, MUTED, "Medium", "ra", c.a(1))
+
+def b_grace(c, p):
+    text(c, (960, 150), "The grace period", 64, INK, "Bold", "ma", c.a(), disp=True)
+    y = 470; al = c.a(.3)
+    w1 = 820 * ease((c.lt - .3) / 1.2); rrect(c, (240, y, 240 + w1, y + 90), 24, BLUE, al)
+    text(c, (650, y + 45), "Billing cycle (~1 month)", 38, CARD, "Bold", "mm", c.a(1.2))
+    a2 = c.a(1.6); w2 = 520 * ease((c.lt - 1.6) / 1)
+    if w2 > 20: rrect(c, (1080, y, 1080 + w2, y + 90), 24, GREEN, a2)
+    text(c, (1340, y + 45), "Grace period", 38, CARD, "Bold", "mm", c.a(2.4))
+    for x, lab, a in ((1070, "Statement closes", c.a(1.4)), (1610, "Due date", c.a(2.4))):
+        c.d.line([(x, y - 40), (x, y + 130)], fill=fade(INK, a), width=5)
+        text(c, (x, y - 90), lab, 34, INK, "Bold", "ma", a)
+    a3 = c.a(3.2); rrect(c, (300, 700, 1620, 800), 30, GREEN, a3)
+    text(c, (960, 750), "Statement balance paid in full = $0 interest on purchases", 40, CARD, "Bold", "mm", a3)
+    text(c, (960, 860), "On most cards  ·  Source: CFPB", 28, MUTED, "Medium", "ma", c.a(3.6))
+
+def b_atm(c, p):
+    text(c, (960, 150), "Cash advance", 64, INK, "Bold", "ma", c.a(), disp=True)
+    al = c.a(.3); rrect(c, (300, 280, 760, 800), 30, (70, 80, 100), al)
+    rrect(c, (350, 330, 710, 520), 16, (150, 210, 200), al)
+    text(c, (530, 425), "$ $ $", 64, INK, "Bold", "mm", al)
+    for r in range(3):
+        for q in range(3): rrect(c, (380 + q * 110, 560 + r * 70, 460 + q * 110, 610 + r * 70), 10, (200, 205, 215), al)
+    for i, s in enumerate(("Usually no grace period", "Interest can start the same day", "Often a higher rate + a fee")):
+        a = c.a(1 + i * 1.2); check(c, 900, 380 + i * 150, 34, a, False)
+        text(c, (960, 380 + i * 150), s, 48, INK, "SemiBold", "lm", a)
+
+STMT = [("Statement balance", "$1,240.18"), ("Current balance", "$1,385.42"), ("Minimum payment due", "$37.00"),
+        ("Payment due date", "Dec 18"), ("Interest charged", "$21.64")]
+def b_statement5(c, p):
+    text(c, (960, 120), "Find these 5 numbers", 60, INK, "Bold", "ma", 1, disp=True)
+    hi = p.get("hi", -1); off = card(c, (420, 220, 1500, 840), 1, 28)
+    for i, (lab, val) in enumerate(STMT):
+        y = 270 + i * 110
+        on = i == hi
+        if on: rrect(c, (450, y, 1470, y + 90), 18, (226, 244, 236), c.a(0, .3))
+        col = ACC if on else (INK if i <= hi else MUTED)
+        text(c, (490, y + 45), f"{i + 1}. {lab}", 44, col, "Bold" if on else "SemiBold", "lm", 1)
+        text(c, (1430, y + 45), val, 44, col, "Bold", "rm", 1)
+    text(c, (960, 870), "Example statement", 28, MUTED, "Medium", "ma", 1)
+
+def b_minsplit(c, p):
+    text(c, (960, 150), "Your first minimum payment: $141.67", 58, INK, "Bold", "ma", c.a(), disp=True)
+    x0, x1, y = 260, 1660, 420; tot = 141.67; f = 91.67 / tot
+    a = c.a(.5); xi = x0 + (x1 - x0) * f * ease((c.lt - .5) / 1)
+    rrect(c, (x0, y, x1, y + 140), 30, SOFT, a)
+    if xi > x0 + 20: rrect(c, (x0, y, xi, y + 140), 30, RED, a)
+    a2 = c.a(1.8)
+    if a2 > 0: rrect(c, (x0 + (x1 - x0) * f + 6, y, x1, y + 140), 30, GREEN, a2)
+    text(c, (x0 + (x1 - x0) * f / 2, y + 70), "Interest  $91.67", 46, CARD, "Bold", "mm", c.a(1.3))
+    text(c, (x0 + (x1 - x0) * (1 + f) / 2, y + 70), "Debt  $50", 46, CARD, "Bold", "mm", a2)
+    text(c, (960, 680), "$5,000 at 22% APR  ·  minimum = 1% of balance + interest", 38, MUTED, "Medium", "ma", c.a(2.4))
+    text(c, (960, 860), "Example  ·  formulas differ by bank and country", 28, MUTED, "Medium", "ma", c.a(2.6))
+
+PAY = [("Minimum only", 230, "19 years", "$8,100", RED), ("Fixed $150 / month", 52, "52 months", "$2,800", GOLD),
+       ("Fixed $200 / month", 34, "34 months", "$1,750", GREEN)]
+def b_payoff(c, p):
+    text(c, (960, 130), "Same $5,000. Same 22% APR.", 58, INK, "Bold", "ma", c.a() if p["stage"] == 1 else 1, disp=True)
+    text(c, (1640, 230), "Interest paid", 34, MUTED, "Bold", "ra", 1)
+    for i, (lab, m, tl, intr, col) in enumerate(PAY[:p["stage"]]):
+        new = i == p["stage"] - 1; a = c.a(.2) if new else 1
+        y = 290 + i * 180; w = 1000 * m / 230 * (ease((c.lt - .2) / 1.4) if new else 1)
+        text(c, (260, y), lab, 40, INK, "SemiBold", "la", a)
+        if w > 30: rrect(c, (260, y + 55, 260 + w, y + 125), 20, col, a)
+        text(c, (280 + w, y + 90), tl, 40, col, "Bold", "lm", a)
+        text(c, (1640, y + 90), intr, 56, col, "Bold", "rm", a, disp=True)
+    text(c, (960, 860), "Simplified example: no new purchases or fees", 28, MUTED, "Medium", "ma", 1)
 
 BEATS = {k[2:]: v for k, v in globals().items() if k.startswith("b_")}
 
@@ -405,7 +518,8 @@ def sub_chunks(txt):
 def build_timeline(ep, audio_dir):
     t, secs = 0.0, []
     for i, sec in enumerate(ep.SECTIONS):
-        f = os.path.join(audio_dir, f"s{i:02d}.mp3")
+        import glob
+        f = sorted(glob.glob(os.path.join(audio_dir, f"s{i:02d}.*")))[0]
         d = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f]))
         txt = sec["text"]; L = len(txt)
         beats = []
@@ -432,6 +546,10 @@ def render_frame(secs, total, T):
     nxt = [bt for bt, _ in sec["beats"] if bt > beat_t] + [sec["start"] + sec["dur"] + GAP]
     c = Ctx(img, T - beat_t, nxt[0] - beat_t)
     BEATS[beat["type"]](c, beat)
+    if beat.get("char"):
+        pose, cx, hh = beat["char"]
+        al = c.a(0, .5); blink = (T % 3.7) < .13
+        character.paste(img, pose, cx, 900 + (1 - al) * 400, hh, blink, 4 * math.sin(T * 2.2))
     d = c.d
     # шапка
     d.rounded_rectangle((60, 46, 60 + F(26, "Bold").getlength(sec["label"].upper()) + 48, 96), 25, fill=INK)
