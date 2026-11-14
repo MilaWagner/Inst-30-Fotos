@@ -462,7 +462,7 @@ SECTIONS = [
     "head": "Recap",
     "items": [
      "Invest from your paycheck, with tax breaks",
-     "Traditional: tax now saved. Roth: later",
+     "Traditional saves tax now, Roth later",
      "Always get the full match",
      "Know vesting and limits",
      "Low fees, no early withdrawals"

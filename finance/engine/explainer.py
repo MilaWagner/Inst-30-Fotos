@@ -512,22 +512,23 @@ def b_growth(c, p):
     for k, lab in ((0, "25"), (0.25, "35"), (0.5, "45"), (0.75, "55"), (1, "65")):
         text(c, (x0 + k * (x1 - x0), y1 + 20), lab, 30, MUTED, "Medium", "ma", al)
     text(c, (x1, y1 + 60), "age", 28, MUTED, "Medium", "ra", al)
-    for start, col, delay in p["lines"]:
-        col = tuple(col)
+    amt = p.get("monthly", 200)
+    for ln in p["lines"]:
+        start, col, delay = ln[0], tuple(ln[1]), ln[2]; stop = ln[3] if len(ln) > 3 else 65
         pts = []; b = 0.0
         for m in range(480):
-            if m >= (start - 25) * 12: b = b * (1 + .07 / 12) + 200
+            b = b * (1 + .07 / 12) + (amt if (start - 25) * 12 <= m < (stop - 25) * 12 else 0)
             if m % 6 == 0: pts.append((x0 + m / 480 * (x1 - x0), y1 - b / maxv * (y1 - y0)))
         n = int(len(pts) * clamp((c.lt - delay) / 3.0))
         if n > 1: c.d.line(pts[:n], fill=col, width=9, joint="curve")
         if n == len(pts):
-            below = start > 25
-            if below: text(c, (x0 + 20, y0 + 40), f"start at {start}: ~${round(b / 1000)}k", 38, col, "Bold", "la", 1)
-            else: text(c, (x1 - 10, pts[-1][1] - 50), f"start at {start}: ~${round(b / 1000)}k", 38, col, "Bold", "ra", 1)
+            lab = (f"invest {start}–{stop} only" if stop < 65 else f"start at {start}") + f": ~${round(b / 1000)}k"
+            if start > 25: text(c, (x0 + 20, y0 + 40), lab, 38, col, "Bold", "la", 1)
+            else: text(c, (x1 - 10, pts[-1][1] - 50), lab, 38, col, "Bold", "ra", 1)
     if p.get("contrib"):
-        a = c.a(p["contrib"]); y = y1 - 96000 / maxv * (y1 - y0)
+        a = c.a(p["contrib"]); y = y1 - p.get("contrib_v", 96000) / maxv * (y1 - y0)
         c.d.line([(x0, y), (x1, y)], fill=fade(MUTED, a), width=3)
-        text(c, (x0 + 10, y - 44), "you put in $96k", 32, MUTED, "Bold", "la", a)
+        text(c, (x0 + 10, y - 44), p.get("contrib_lab", "you put in $96k"), 32, MUTED, "Bold", "la", a)
     text(c, (960, 870), "Example, not a promise: returns vary and can be negative", 28, MUTED, "Medium", "ma", c.a(1))
 
 def b_bars(c, p):
