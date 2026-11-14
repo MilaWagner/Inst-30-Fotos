@@ -177,6 +177,7 @@ SECTIONS = [
     ],
     "compact": True,
     "lw": 140,
+    "max": 80000,
     "note": "Source: IRS. Higher brackets: 24%, 32%, 35%, 37%."
    }
   ]
