@@ -558,6 +558,36 @@ def b_twocol(c, p):
         text(c, (x + 320, 300 + off), title, 48, CARD, "Bold", "mm", a)
         for k, s in enumerate(items): text(c, (x + 50, 420 + off + k * 90), "• " + s, 42, INK, "SemiBold", "la", a)
 
+
+def b_pricepath(c, p):
+    text(c, (960, 120), p["head"], 58, INK, "Bold", "ma", c.a(), disp=True)
+    pts = p["points"]; mx = p.get("max", max(v for _, v, _ in pts) * 1.1)
+    x0, x1, y0, y1 = 300, 1620, 240, 800
+    al = c.a(.2); c.d.line([(x0, y1), (x1, y1)], fill=fade(LINE, al), width=4)
+    xy = [(x0 + (x1 - x0) * i / (len(pts) - 1), y1 - v / mx * (y1 - y0)) for i, (_, v, _) in enumerate(pts)]
+    for i, ((lab, v, col), (x, y)) in enumerate(zip(pts, xy)):
+        tm = p["tm"][i] if "tm" in p else i * 1.5
+        a = c.a(tm)
+        if i and a > 0:
+            px, py = xy[i - 1]; c.d.line([(px, py), (px + (x - px) * a, py + (y - py) * a)], fill=tuple(col), width=9)
+        if a > 0:
+            c.d.ellipse((x - 14, y - 14, x + 14, y + 14), fill=fade(tuple(col), a))
+            text(c, (x, y - 40), lab, 40, tuple(col), "Bold", "ms", a)
+    if p.get("note"): text(c, (960, 860), p["note"], 28, MUTED, "Medium", "ma", c.a(1))
+
+def b_lifeline(c, p):
+    text(c, (960, 120), p.get("head", "Warren Buffett's early years"), 58, INK, "Bold", "ma", 1, disp=True)
+    ev = p["events"]; x0, x1, y = 260, 1660, 520
+    c.d.line([(x0, y), (x1, y)], fill=LINE, width=8)
+    for i, (age, lab) in enumerate(ev):
+        tm = p["tm"][i] if "tm" in p else i * 1.5
+        a = c.a(tm); x = x0 + (x1 - x0) * i / (len(ev) - 1)
+        on = i == len([1 for t_ in (p.get("tm") or []) if c.lt >= t_]) - 1
+        col = ACC if on else INK
+        c.d.ellipse((x - 26, y - 26, x + 26, y + 26), fill=fade(col, a))
+        text(c, (x, y - 50), f"age {age}", 40, col, "Bold", "ms", a, disp=True)
+        for k, ln in enumerate(wrap(lab, 32, 250, "SemiBold")): text(c, (x, y + 60 + k * 42), ln, 32, INK, "SemiBold", "ma", a)
+
 BEATS = {k[2:]: v for k, v in globals().items() if k.startswith("b_")}
 
 # ---------- субтитры / тайминг ----------
