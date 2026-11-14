@@ -556,7 +556,11 @@ def b_twocol(c, p):
         x = 300 + i * 680; a = c.a(.4 + i * p.get("step", 1.5)); off = card(c, (x, 250, x + 640, 800), a, 34)
         rrect(c, (x, 250 + off, x + 640, 350 + off), 34, tuple(col), a); c.d.rectangle((x, 310 + off, x + 640, 350 + off), fill=fade(tuple(col), a))
         text(c, (x + 320, 300 + off), title, 48, CARD, "Bold", "mm", a)
-        for k, s in enumerate(items): text(c, (x + 50, 420 + off + k * 90), "• " + s, 42, INK, "SemiBold", "la", a)
+        yy = 420
+        for s in items:
+            for j, ln in enumerate(wrap(s, 40, 540, "SemiBold")):
+                text(c, (x + 50, yy + off), ("• " if j == 0 else "   ") + ln, 40, INK, "SemiBold", "la", a); yy += 54
+            yy += 26
 
 
 def b_pricepath(c, p):
