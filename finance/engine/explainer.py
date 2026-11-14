@@ -540,8 +540,8 @@ def b_bars(c, p):
     if p.get("note"): text(c, (960, 870), p["note"], 28, MUTED, "Medium", "ma", c.a(1))
 
 def b_countries(c, p):
-    text(c, (960, 110), "Tax-advantaged accounts", 58, INK, "Bold", "ma", c.a(), disp=True)
-    rows = [("United States", "401(k)  ·  IRA"), ("United Kingdom", "Stocks & Shares ISA  ·  pension"),
+    text(c, (960, 110), p.get("head", "Tax-advantaged accounts"), 58, INK, "Bold", "ma", c.a(), disp=True)
+    rows = p.get("rows") or [("United States", "401(k)  ·  IRA"), ("United Kingdom", "Stocks & Shares ISA  ·  pension"),
             ("Canada", "TFSA  ·  RRSP"), ("Australia", "Superannuation")]
     for i, (cn, acc) in enumerate(rows):
         y = 210 + i * 150; a = c.a(p["tm"][i] if "tm" in p else i)
