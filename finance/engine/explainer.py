@@ -174,11 +174,12 @@ def b_two_apps(c, p):
 
 FACT = [(35, "Payment history"), (30, "Amounts owed"), (15, "Length of history"), (10, "New credit"), (10, "Credit mix")]
 def b_donut(c, p):
+    F = [tuple(x) for x in p["parts"]] if "parts" in p else FACT
     hi = p.get("hi"); prog = clamp(c.lt / p.get("build", 9.0)) if not hi else 1
-    donut(c, 620, 540, 320, FACT, prog, c.a(), hi)
+    donut(c, 620, 540, 320, F, prog, c.a(), hi)
     text(c, (960, 140), p.get("head", "What's in your FICO Score"), 60, INK, "Bold", "ma", c.a(), disp=True)
-    for i, (pct, lab) in enumerate(FACT):
-        show = clamp(prog * len(FACT) - i) if not hi else 1
+    for i, (pct, lab) in enumerate(F):
+        show = clamp(prog * len(F) - i) if not hi else 1
         if show <= 0: continue
         al = ease(show) * (1 if (hi is None or i in hi) else .35)
         y = 330 + i * 110
@@ -186,7 +187,7 @@ def b_donut(c, p):
         text(c, (1150, y + 22), lab, 46, INK, "SemiBold", "lm", al)
         text(c, (1720, y + 22), f"{pct}%", 50, INK, "Bold", "rm", al, disp=True)
     if hi: text(c, (620, 540), "65%", 96, INK, "Bold", "mm", c.a(.3), disp=True)
-    text(c, (620, 920), "Source: myFICO", 24, MUTED, "Medium", "ma", c.a(1))
+    text(c, (620, 920), p.get("src", "Source: myFICO"), 24, MUTED, "Medium", "ma", c.a(1))
 
 def b_calendar(c, p):
     text(c, (960, 180), "Do you pay on time?", 64, INK, "Bold", "ma", c.a(), disp=True)
