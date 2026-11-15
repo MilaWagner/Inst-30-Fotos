@@ -3,8 +3,9 @@
 set -e
 T="$(cd "$(dirname "$0")" && pwd)"
 command -v brew >/dev/null || { echo "Сначала установите Homebrew: https://brew.sh"; exit 1; }
-brew install python ffmpeg
-python3 -m venv "$T/../.venv"
+brew install python@3.12 ffmpeg
+rm -rf "$T/../.venv"
+"$(brew --prefix python@3.12)/bin/python3.12" -m venv "$T/../.venv"
 "$T/../.venv/bin/pip" install --upgrade pip
 "$T/../.venv/bin/pip" install pillow numpy soundfile kokoro-onnx
 M="$HOME/kokoro-models"; mkdir -p "$M"
