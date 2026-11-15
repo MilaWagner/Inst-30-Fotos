@@ -11,7 +11,7 @@ import character
 
 W, H, FPS = 1920, 1080, 25
 GAP = 0.7  # пауза между разделами, с
-FONT_DIR = "/usr/share/fonts/opentype/inter/"
+FONT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts") + os.sep  # Inter (OFL), лежит в репозитории
 
 BG = (247, 244, 238); INK = (20, 33, 61); MUTED = (112, 120, 138); LINE = (226, 220, 208)
 CARD = (255, 255, 255); ACC = (16, 122, 96); GOLD = (222, 160, 36); RED = (206, 64, 60)
