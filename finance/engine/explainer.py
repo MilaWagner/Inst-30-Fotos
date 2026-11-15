@@ -656,6 +656,21 @@ def b_ident(c, p):
         for i, ln in enumerate(wrap(p["title"], 96, 1600, "Bold")):
             text(c, (x + 960, 460 + i * 112), ln, 96, mix(ACC, CARD, al), "Bold", "ma", disp=True)
 
+def b_score(c, p):
+    """Карточка участника сравнения: имя + шкалы 1–5 (рейтинг) с подписями."""
+    al = c.a(); col = tuple(p.get("color", ACC))
+    off = card(c, (360, 150, 1560, 830), al, 34)
+    c.d.rounded_rectangle((360, 150 + off, 1560, 270 + off), 34, fill=fade(col, al)); c.d.rectangle((360, 230 + off, 1560, 270 + off), fill=fade(col, al))
+    text(c, (420, 210 + off), p.get("tag", ""), 34, CARD, "Bold", "lm", al)
+    text(c, (1500, 210 + off), p["name"], 52, CARD, "Bold", "rm", al, disp=True)
+    for i, (lab, n, note) in enumerate(p["rows"]):
+        y = 340 + i * 150 + off; a = c.a(.4 + i * p.get("step", 1.2))
+        text(c, (430, y + 30), lab, 44, INK, "Bold", "lm", a)
+        for j in range(5):
+            on = j < n; x = 760 + j * 76
+            c.d.rounded_rectangle((x, y + 8, x + 60, y + 52), 12, fill=fade(col if on else LINE, a))
+        text(c, (1160, y + 30), note, 34, MUTED, "SemiBold", "lm", a)
+
 def b_question(c, p):
     """Карточка вопроса: большой номер в круге + текст вопроса (формат Q&A)."""
     al = c.a(); cx, cy = 560, 470

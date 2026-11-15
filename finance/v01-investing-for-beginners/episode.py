@@ -1,11 +1,31 @@
-# Ролик «Investing for Beginners» для finance/engine/explainer.py
+# Ролик «Investing for Beginners» (рубрика Start Here, тема lilac)
+THEME = "lilac"
+LOOK = "finn"
 SECTIONS = [
  {
   "label": "Intro",
-  "text": "Here's a number that surprises most people. If you invest two hundred dollars a month from age twenty-five to sixty-five, and your investments grow seven percent a year on average, you'd end up with about five hundred and twenty-five thousand dollars. You'd only have put in ninety-six thousand. The rest is growth. Start ten years later, at thirty-five, and you'd end up with about two hundred and forty-four thousand. Same monthly amount. Less than half the result. Seven percent is an example, not a promise. Markets go up and down. But the lesson holds: time does most of the work. Today, we'll go from zero to your first investment, step by step. This video is for education only. It's not financial advice.",
+  "text": "Most people wait years to start investing, and that wait can cost them hundreds of thousands of dollars. In the next few minutes, you'll learn exactly how to start, step by step, even with a small amount. Here's a number that surprises most people. If you invest two hundred dollars a month from age twenty-five to sixty-five, and your investments grow seven percent a year on average, you'd end up with about five hundred and twenty-five thousand dollars. You'd only have put in ninety-six thousand. The rest is growth. Start ten years later, at thirty-five, and you'd end up with about two hundred and forty-four thousand. Same monthly amount. Less than half the result. Seven percent is an example, not a promise. Markets go up and down. But the lesson holds: time does most of the work. Today, we'll go from zero to your first investment, step by step. This video is for education only. It's not financial advice.",
   "beats": [
    {
     "at": "^",
+    "type": "hook",
+    "kicker": "Start Here",
+    "text": "Waiting to invest can cost you hundreds of thousands."
+   },
+   {
+    "at": "In the next few minutes",
+    "type": "hook",
+    "kicker": "In this video",
+    "text": "How to start investing, step by step, even with a little."
+   },
+   {
+    "at": "Here's a number",
+    "type": "ident",
+    "series": "Start Here",
+    "title": "Investing for Beginners"
+   },
+   {
+    "at": "that surprises most people",
     "type": "growth",
     "lines": [
      [

@@ -1,11 +1,31 @@
-# Ролик «The Psychology of Money: lessons»
+# The Psychology of Money (рубрика Money Mindset, тема lilac)
+THEME = "lilac"
+LOOK = "finn_hoodie"
 SECTIONS = [
  {
   "label": "Intro",
-  "text": "A gas station attendant and janitor in Vermont named Ronald Read died in 2014. He lived simply, drove an old car, and nobody thought he was rich. Then his family discovered he had left behind almost eight million dollars, most of it built by buying stocks and holding them for decades. He gave millions to his local hospital and library. How does that happen? Because doing well with money has less to do with how smart you are, and more to do with how you behave. That's the big idea behind The Psychology of Money, a bestselling book by Morgan Housel. Today: seven lessons inspired by it, in plain language. This channel isn't affiliated with the author, and this video is for education only. It's not financial advice.",
+  "text": "Being smart doesn't make you good with money. Behavior does. In the next few minutes, you'll learn the money lessons that matter more than any spreadsheet. A gas station attendant and janitor in Vermont named Ronald Read died in 2014. He lived simply, drove an old car, and nobody thought he was rich. Then his family discovered he had left behind almost eight million dollars, most of it built by buying stocks and holding them for decades. He gave millions to his local hospital and library. How does that happen? Because doing well with money has less to do with how smart you are, and more to do with how you behave. That's the big idea behind The Psychology of Money, a bestselling book by Morgan Housel. Today: seven lessons inspired by it, in plain language. This channel isn't affiliated with the author, and this video is for education only. It's not financial advice.",
   "beats": [
    {
     "at": "^",
+    "type": "hook",
+    "kicker": "Money Mindset",
+    "text": "Smart people still make terrible money decisions."
+   },
+   {
+    "at": "In the next few minutes",
+    "type": "hook",
+    "kicker": "In this video",
+    "text": "The behavior lessons that build real wealth."
+   },
+   {
+    "at": "A gas station",
+    "type": "ident",
+    "series": "Money Mindset",
+    "title": "The Psychology of Money"
+   },
+   {
+    "at": "attendant and janitor",
     "type": "say",
     "text": "A gas station attendant and janitor from Vermont.",
     "sub": "Lived simply. Drove an old car.",
@@ -111,7 +131,8 @@ SECTIONS = [
     "char": [
      "think",
      420,
-     640
+     640,
+     "rose"
     ]
    },
    {
@@ -320,7 +341,8 @@ SECTIONS = [
     "char": [
      "happy",
      420,
-     640
+     640,
+     "maya"
     ]
    },
    {
@@ -378,7 +400,8 @@ SECTIONS = [
     "char": [
      "shrug",
      420,
-     640
+     640,
+     "rose"
     ]
    },
    {

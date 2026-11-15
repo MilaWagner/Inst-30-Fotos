@@ -1,47 +1,131 @@
-# Ролик «High-Yield Savings Accounts Explained (US)»
+# Ролик «Where Should $10,000 Live?» (Head to Head, тема blush)
+THEME = "blush"
+LOOK = "finn_casual"
 SECTIONS = [
  {
-  "label": "Intro",
-  "text": "If your savings sit in a regular bank savings account, there's a good chance they're earning almost nothing. As of late 2026, the average US savings account pays well under one percent a year, according to the FDIC, while some high-yield savings accounts pay around four percent. On ten thousand dollars, that's the difference between about forty dollars and about four hundred dollars a year, for doing nothing different. Today: what a high-yield savings account is, how it works, whether it's safe, what to watch out for, and when you should use one. This video focuses on the US, is for education only, and is not financial advice.",
+  "label": "The question",
+  "text": "If your savings sit in a regular bank account, they may be earning almost nothing. In the next few minutes, you'll find out where ten thousand dollars should actually live, and how to earn up to ten times more interest without taking more risk. Here's the setup. Five places for your cash, judged on three things: the rate, the safety, and how fast you can get your money. This is about the US, for education only, and it's not financial advice.",
   "beats": [
    {
     "at": "^",
-    "type": "say",
-    "text": "Is your savings account earning almost nothing?",
-    "char": [
-     "worried",
-     420,
-     640
+    "type": "hook",
+    "kicker": "Head to Head",
+    "text": "Your savings may be earning almost nothing."
+   },
+   {
+    "at": "In the next few minutes",
+    "type": "hook",
+    "kicker": "In this video",
+    "text": "Where $10,000 should live, for up to 10× the interest."
+   },
+   {
+    "at": "Here's the setup",
+    "type": "ident",
+    "series": "Head to Head",
+    "title": "Where Should $10,000 Live?"
+   },
+   {
+    "at": "Five places for your cash",
+    "type": "checklist",
+    "head": "5 contenders, 3 tests",
+    "items": [
+     "Rate",
+     "Safety",
+     "Access"
+    ],
+    "marks": [
+     "the rate",
+     "the safety",
+     "how fast"
     ]
    },
    {
-    "at": "As of late 2026",
-    "type": "bars",
-    "head": "Typical yearly rates, late 2026 (US)",
-    "step": 1.5,
+    "at": "This is about the US",
+    "type": "disclaimer"
+   }
+  ]
+ },
+ {
+  "label": "Contender 1",
+  "text": "Contender one: the regular bank savings account. As of late 2026, the average US savings account pays well under one percent a year, according to the FDIC. On ten thousand dollars, that's roughly forty dollars a year. Safety is excellent: deposits at insured banks are protected up to two hundred and fifty thousand dollars per depositor, per bank, for each ownership category. Access is instant. Great safety, great access, terrible rate.",
+  "beats": [
+   {
+    "at": "^",
+    "type": "score",
+    "tag": "CONTENDER 1",
+    "name": "Regular savings",
+    "color": [
+     112,
+     120,
+     138
+    ],
     "rows": [
      [
-      "Average savings account (FDIC)",
-      0.4,
-      "under 1%",
-      [
-       112,
-       120,
-       138
-      ]
+      "Rate",
+      1,
+      "well under 1%"
      ],
      [
-      "Some high-yield accounts",
-      4.0,
-      "around 4%",
-      [
-       36,
-       156,
-       92
-      ]
+      "Safety",
+      5,
+      "FDIC insured"
+     ],
+     [
+      "Access",
+      5,
+      "instant"
      ]
     ],
-    "note": "Rates change often. Sources: FDIC, comparison sites"
+    "step": 1.2
+   },
+   {
+    "at": "On ten thousand dollars",
+    "type": "bignum",
+    "head": "$10,000 for a year",
+    "num": "~$40",
+    "sub": "at a typical bank savings rate (FDIC national average)"
+   },
+   {
+    "at": "Safety is excellent",
+    "type": "bignum",
+    "head": "FDIC deposit insurance",
+    "num": "$250,000",
+    "sub": "per depositor, per bank, per ownership category"
+   }
+  ]
+ },
+ {
+  "label": "Contender 2",
+  "text": "Contender two: the high-yield savings account. Same idea, usually at an online bank or a credit union, but some of them pay around four percent, according to comparison sites. On ten thousand dollars, that's about four hundred dollars a year instead of forty. Is it safe? At an FDIC insured bank, or an NCUA insured credit union, it gets the same protection. Access is good, but moving money to your main account can take one to three business days.",
+  "beats": [
+   {
+    "at": "^",
+    "type": "score",
+    "tag": "CONTENDER 2",
+    "name": "High-yield savings",
+    "color": [
+     36,
+     156,
+     92
+    ],
+    "rows": [
+     [
+      "Rate",
+      4,
+      "around 4% at some banks"
+     ],
+     [
+      "Safety",
+      5,
+      "FDIC / NCUA insured"
+     ],
+     [
+      "Access",
+      4,
+      "1–3 days to transfer"
+     ]
+    ],
+    "step": 1.2
    },
    {
     "at": "On ten thousand dollars",
@@ -50,7 +134,7 @@ SECTIONS = [
     "step": 1.5,
     "rows": [
      [
-      "At ~0.4%",
+      "Regular savings",
       40,
       "~$40",
       [
@@ -60,7 +144,7 @@ SECTIONS = [
       ]
      ],
      [
-      "At ~4%",
+      "High-yield savings",
       400,
       "~$400",
       [
@@ -70,256 +154,101 @@ SECTIONS = [
       ]
      ]
     ],
-    "note": "Example calculation"
-   },
-   {
-    "at": "This video focuses",
-    "type": "disclaimer"
+    "note": "Rates change often. Sources: FDIC, NerdWallet, Bankrate (late 2026)"
    }
   ]
  },
  {
-  "label": "What it is",
-  "text": "A high-yield savings account is simply a savings account that pays a higher interest rate than a typical bank savings account. They're often offered by online banks and some credit unions. Because online banks don't run big branch networks, they can afford to pay savers more. Your money stays as cash. It doesn't go into the stock market, so its value doesn't swing up and down. You earn interest, and you can usually move money in and out whenever you need it.",
+  "label": "Contender 3",
+  "text": "Contender three: the certificate of deposit, or CD. You lock in a fixed rate for a set term, like six months or a year. That's its superpower: if rates fall, yours doesn't. But your money is tied up, and you may pay a penalty if you withdraw early. Great for money with a known date, bad for an emergency fund.",
   "beats": [
    {
     "at": "^",
-    "type": "say",
-    "text": "A savings account that pays a higher rate.",
-    "sub": "Often at online banks and some credit unions",
-    "char": [
-     "point_right",
-     420,
-     640
-    ]
-   },
-   {
-    "at": "Your money stays as cash",
-    "type": "checklist",
-    "head": "How it works",
-    "items": [
-     "Your money stays as cash",
-     "Value doesn't swing like stocks",
-     "You earn interest",
-     "Move money in and out"
+    "type": "score",
+    "tag": "CONTENDER 3",
+    "name": "Certificate of deposit",
+    "color": [
+     52,
+     104,
+     214
     ],
-    "marks": [
-     "Your money stays",
-     "It doesn't go",
-     "You earn interest",
-     "and you can usually"
-    ]
-   }
-  ]
- },
- {
-  "label": "APY",
-  "text": "The rate you'll see is called the APY, or annual percentage yield. It shows how much you'd earn in a year, including the effect of compounding, because interest is usually added to your balance every month or every day, and then that interest earns interest too. Here's the simple math. Ten thousand dollars at four percent APY earns about four hundred dollars in a year. At zero point four percent, about forty dollars. Same money, same safety, ten times the interest.",
-  "beats": [
-   {
-    "at": "^",
-    "type": "lines",
-    "head": "APY",
-    "lines": [
-     [
-      "Annual Percentage Yield"
-     ],
-     [
-      "includes compounding",
-      48
-     ]
-    ],
-    "step": 1.5
-   },
-   {
-    "at": "Here's the simple math",
-    "type": "bars",
-    "head": "$10,000 for one year",
-    "step": 2.5,
     "rows": [
      [
-      "At 0.4% APY",
-      40,
-      "~$40",
-      [
-       112,
-       120,
-       138
-      ]
+      "Rate",
+      4,
+      "fixed for the term"
      ],
      [
-      "At 4% APY",
-      400,
-      "~$400",
-      [
-       36,
-       156,
-       92
-      ]
-     ]
-    ],
-    "note": "Same money, same safety, ten times the interest"
-   }
-  ]
- },
- {
-  "label": "Is it safe",
-  "text": "Is it safe? At banks insured by the FDIC, deposits are protected up to two hundred and fifty thousand dollars per depositor, per bank, for each account ownership category. At federally insured credit unions, the NCUA provides the same level of protection. That means if the bank fails, your insured money is protected. Before opening an account, check that the bank is actually FDIC insured, or the credit union is NCUA insured. Be careful with apps that aren't banks themselves. Make sure your money is held at an insured bank.",
-  "beats": [
-   {
-    "at": "^",
-    "type": "bignum",
-    "head": "FDIC deposit insurance",
-    "num": "$250,000",
-    "sub": "per depositor, per bank, per ownership category",
-    "src": "Credit unions: NCUA, same level of protection"
-   },
-   {
-    "at": "Before opening an account",
-    "type": "checklist",
-    "head": "Before you open one",
-    "items": [
-     "Is the bank FDIC insured?",
-     "Or the credit union NCUA insured?",
-     "Is your money held at an insured bank?"
-    ],
-    "marks": [
-     "Before opening",
-     "or the credit union",
-     "Make sure"
-    ]
-   }
-  ]
- },
- {
-  "label": "Variable rates",
-  "text": "One important detail: the rate isn't fixed. High-yield savings rates are variable. They usually move with the interest rates set by the Federal Reserve. When the Fed cuts rates, savings rates tend to fall. When it raises rates, they tend to rise. So the four percent you see today might be three percent next year, or more. That's normal. If you want to lock in a rate for a set time, that's what a certificate of deposit, or CD, is for. But then your money is tied up until it matures.",
-  "beats": [
-   {
-    "at": "^",
-    "type": "say",
-    "text": "The rate is variable, not fixed.",
-    "sub": "It usually moves with the Federal Reserve's rates",
-    "char": [
-     "shrug",
-     420,
-     640
-    ]
-   },
-   {
-    "at": "When the Fed cuts",
-    "type": "twocol",
-    "head": "What moves your rate",
-    "step": 2.5,
-    "cols": [
-     [
-      "Fed cuts rates",
-      [
-       "Savings rates tend to fall"
-      ],
-      [
-       206,
-       64,
-       60
-      ]
+      "Safety",
+      5,
+      "FDIC insured"
      ],
      [
-      "Fed raises rates",
-      [
-       "Savings rates tend to rise"
-      ],
-      [
-       36,
-       156,
-       92
-      ]
+      "Access",
+      1,
+      "locked, early penalty"
      ]
-    ]
+    ],
+    "step": 1.2
    },
    {
-    "at": "If you want to lock in",
+    "at": "Great for money with a known date",
     "type": "say",
-    "text": "Want a fixed rate? That's a CD.",
-    "sub": "But the money is tied up until it matures",
+    "text": "Known date? CD. Emergency fund? No.",
     "char": [
      "think",
      420,
-     640
+     640,
+     "maya"
     ]
    }
   ]
  },
  {
-  "label": "Watch out",
-  "text": "Here's what to watch out for. Promotional rates that only last a few months, then drop. Minimum balances you need to keep to earn the top rate. Monthly fees, which can wipe out your interest. Conditions, like needing a linked checking account or direct deposit. And transfer times: moving money from an online bank to your main account can take one to three business days. Always read the fine print, and compare the rate you'll actually get, not the biggest number in the ad.",
+  "label": "Contender 4",
+  "text": "Contender four: the money market fund. It's an investment fund, usually very low risk, often paying a rate similar to the best savings accounts. But here's the catch many people miss: it's not FDIC insured. Don't confuse it with a money market account at a bank, which is insured.",
   "beats": [
    {
     "at": "^",
-    "type": "checklist",
-    "head": "Watch out for",
-    "items": [
-     "Short promotional rates",
-     "Minimum balances",
-     "Monthly fees",
-     "Conditions like direct deposit",
-     "Transfers taking 1–3 business days"
+    "type": "score",
+    "tag": "CONTENDER 4",
+    "name": "Money market fund",
+    "color": [
+     222,
+     160,
+     36
     ],
-    "marks": [
-     "Promotional rates",
-     "Minimum balances",
-     "Monthly fees",
-     "Conditions",
-     "And transfer times"
-    ]
-   }
-  ]
- },
- {
-  "label": "When to use it",
-  "text": "So when should you use a high-yield savings account? It's great for money you might need in the next few years. Your emergency fund, ideally three to six months of essential expenses. Savings for a big purchase, like a car, a wedding, or a home down payment. And money you're setting aside for irregular bills, like insurance or taxes. It's not the best home for long-term money you won't touch for decades. Over long periods, cash has usually grown more slowly than diversified investments.",
-  "beats": [
-   {
-    "at": "^",
-    "type": "checklist",
-    "head": "Great for",
-    "items": [
-     "Emergency fund: 3–6 months of expenses",
-     "A big purchase: car, wedding, down payment",
-     "Irregular bills: insurance, taxes"
-    ],
-    "marks": [
-     "Your emergency fund",
-     "Savings for a big",
-     "And money you're setting"
-    ]
-   },
-   {
-    "at": "It's not the best home",
-    "type": "say",
-    "text": "Not the best home for money you won't touch for decades.",
-    "sub": "Long term, cash has usually grown more slowly than investments",
-    "char": [
-     "point_right",
-     420,
-     640
-    ]
-   }
-  ]
- },
- {
-  "label": "Inflation",
-  "text": "And remember inflation. If prices rise three percent a year and your savings earn four percent, you're getting a little ahead. If your savings earn zero point four percent, you're falling behind every year, because your money buys less over time. That's why leaving cash in a low-rate account isn't really safe for your purchasing power. A high-yield account helps your cash keep up. But for real long-term growth, most people need to invest as well.",
-  "beats": [
-   {
-    "at": "^",
-    "type": "bars",
-    "head": "If prices rise 3% a year",
-    "step": 2.0,
     "rows": [
      [
-      "Savings at 4%",
-      1,
-      "+1% ahead",
+      "Rate",
+      4,
+      "similar to top savings"
+     ],
+     [
+      "Safety",
+      3,
+      "low risk, NOT FDIC"
+     ],
+     [
+      "Access",
+      4,
+      "usually quick"
+     ]
+    ],
+    "step": 1.2
+   },
+   {
+    "at": "Don't confuse it",
+    "type": "twocol",
+    "head": "Similar names, different safety",
+    "step": 2.0,
+    "cols": [
+     [
+      "Money market ACCOUNT",
+      [
+       "At a bank",
+       "FDIC insured"
+      ],
       [
        36,
        156,
@@ -327,23 +256,129 @@ SECTIONS = [
       ]
      ],
      [
-      "Savings at 0.4%",
-      2.6,
-      "−2.6% behind",
+      "Money market FUND",
+      [
+       "An investment fund",
+       "NOT FDIC insured"
+      ],
       [
        206,
        64,
        60
       ]
      ]
+    ]
+   }
+  ]
+ },
+ {
+  "label": "Contender 5",
+  "text": "Contender five: Treasury bills, short-term loans to the US government. Their interest is exempt from state and local income tax, which can matter if you live in a high-tax state. But buying them takes a bit more effort, and your money is committed until they mature.",
+  "beats": [
+   {
+    "at": "^",
+    "type": "score",
+    "tag": "CONTENDER 5",
+    "name": "Treasury bills",
+    "color": [
+     112,
+     78,
+     186
     ],
-    "note": "Illustration of purchasing power"
+    "rows": [
+     [
+      "Rate",
+      4,
+      "short-term US govt"
+     ],
+     [
+      "Safety",
+      5,
+      "backed by US govt"
+     ],
+     [
+      "Access",
+      2,
+      "held to maturity"
+     ]
+    ],
+    "step": 1.2
    },
    {
-    "at": "That's why leaving cash",
+    "at": "Their interest is exempt",
     "type": "say",
-    "text": "Low-rate cash quietly loses buying power.",
-    "sub": "For long-term growth, most people also invest",
+    "text": "No state or local income tax on the interest.",
+    "sub": "Helpful in high-tax states",
+    "char": [
+     "point_right",
+     420,
+     640,
+     "sam"
+    ]
+   }
+  ]
+ },
+ {
+  "label": "The fine print",
+  "text": "Before we pick a winner, the fine print that trips people up. High-yield rates are variable. They usually move with the Federal Reserve, so four percent today can be three percent next year. Watch for promotional rates that drop after a few months, minimum balances, monthly fees, and conditions like direct deposit. And interest from savings is taxable, usually as ordinary income.",
+  "beats": [
+   {
+    "at": "^",
+    "type": "checklist",
+    "head": "The fine print",
+    "items": [
+     "Rates are variable (they follow the Fed)",
+     "Promo rates that drop",
+     "Minimums, fees, conditions",
+     "Interest is taxable"
+    ],
+    "marks": [
+     "High-yield rates are variable",
+     "Watch for promotional",
+     "minimum balances",
+     "And interest"
+    ]
+   }
+  ]
+ },
+ {
+  "label": "The verdict",
+  "text": "So, the verdict. For an emergency fund and money you might need soon, the high-yield savings account wins: strong rate, insured, easy access. A CD wins for money with a fixed date. T-bills can win in high-tax states. The regular savings account loses, because the same safety is available for far more interest. And inflation is the hidden opponent: at under one percent, your cash loses buying power every year.",
+  "beats": [
+   {
+    "at": "^",
+    "type": "countries",
+    "head": "The verdict",
+    "rows": [
+     [
+      "Emergency fund",
+      "High-yield savings ✓"
+     ],
+     [
+      "Money with a fixed date",
+      "CD"
+     ],
+     [
+      "High-tax state",
+      "Consider T-bills"
+     ],
+     [
+      "Regular savings",
+      "Same safety, far less"
+     ]
+    ],
+    "marks": [
+     "For an emergency fund",
+     "A CD wins",
+     "T-bills can win",
+     "The regular savings"
+    ]
+   },
+   {
+    "at": "And inflation is the hidden opponent",
+    "type": "say",
+    "text": "Inflation is the hidden opponent.",
+    "sub": "Under 1% loses buying power every year",
     "char": [
      "worried",
      420,
@@ -353,144 +388,30 @@ SECTIONS = [
   ]
  },
  {
-  "label": "Taxes",
-  "text": "One more thing: interest from a savings account is taxable. In the US, it's usually taxed as ordinary income, and your bank may send you a form showing how much interest you earned. So your real return is a bit lower than the APY after taxes. It's still much better than earning almost nothing, but it's worth knowing when you compare options.",
-  "beats": [
-   {
-    "at": "^",
-    "type": "say",
-    "text": "Savings interest is taxable.",
-    "sub": "In the US, usually as ordinary income",
-    "char": [
-     "think",
-     420,
-     640
-    ]
-   },
-   {
-    "at": "So your real return",
-    "type": "say",
-    "text": "Your real return is a bit lower than the APY.",
-    "sub": "Still far better than earning almost nothing",
-    "char": [
-     "thumbs_up",
-     420,
-     640
-    ]
-   }
-  ]
- },
- {
-  "label": "Alternatives",
-  "text": "How does a high-yield savings account compare with other places for cash? A money market account at a bank is similar: often a comparable rate, sometimes with a debit card or checks, and FDIC insured too. A money market fund is different: it's an investment fund, usually very low risk, but it's not FDIC insured. A CD pays a fixed rate for a set term, like six months or a year, but you may pay a penalty if you withdraw early. And Treasury bills are short-term loans to the US government, and their interest is exempt from state and local income tax. For most people's emergency fund, a high-yield savings account is the simplest choice, because the money is always there when you need it.",
+  "label": "Your move",
+  "text": "Your move takes about ten minutes. Compare a few insured banks, check the APY, fees and minimums, open the account, link it to your checking, and set up an automatic transfer every payday. Name it Emergency Fund, so you're less tempted to spend it. Next on the channel: is whole life insurance worth it? See you there.",
   "beats": [
    {
     "at": "^",
     "type": "checklist",
-    "head": "Other places for cash",
+    "head": "Your 10-minute move",
     "items": [
-     "Money market account: similar, FDIC insured",
-     "Money market fund: low risk, NOT FDIC insured",
-     "CD: fixed rate, early withdrawal penalty",
-     "Treasury bills: no state or local income tax"
-    ],
-    "marks": [
-     "A money market account",
-     "A money market fund",
-     "A CD pays",
-     "And Treasury bills"
-    ]
-   },
-   {
-    "at": "For most people's emergency fund",
-    "type": "say",
-    "text": "For an emergency fund, simple wins.",
-    "sub": "The money is there when you need it",
-    "char": [
-     "thumbs_up",
-     420,
-     640
-    ]
-   }
-  ]
- },
- {
-  "label": "How to open one",
-  "text": "Opening one usually takes about ten minutes online. Compare a few banks on comparison sites. Check the APY, fees, minimum balance, and insurance. Open the account with your ID and details. Link it to your main checking account. Then set up an automatic transfer every payday, so your savings grow without you thinking about it. Many people give the account a name, like Emergency Fund, so they're less tempted to spend it.",
-  "beats": [
-   {
-    "at": "^",
-    "type": "checklist",
-    "head": "Open one in ~10 minutes",
-    "items": [
-     "Compare a few banks",
-     "Check APY, fees, minimum, insurance",
-     "Open it with your ID",
-     "Link your checking account",
-     "Automate a transfer every payday"
+     "Compare insured banks",
+     "Check APY, fees, minimums",
+     "Open + link to checking",
+     "Auto-transfer every payday",
+     "Name it Emergency Fund"
     ],
     "marks": [
      "Compare a few",
-     "Check the APY",
-     "Open the account",
-     "Link it",
-     "Then set up"
-    ]
-   }
-  ]
- },
- {
-  "label": "Three myths",
-  "text": "Let's clear up three myths. Myth one: high-yield accounts are risky. At an FDIC insured bank, your money is protected up to the limit, just like at a big branch bank. Myth two: online banks are a scam. Many are well established and fully insured. Just check. Myth three: a savings account is enough to build wealth. It's the right place for short-term money, but over decades, investing has historically grown money much faster.",
-  "beats": [
-   {
-    "at": "^",
-    "type": "myth",
-    "n": 1,
-    "myth": "High-yield accounts are risky",
-    "fact": "At an FDIC insured bank, your money is protected up to the limit."
-   },
-   {
-    "at": "Myth two",
-    "type": "myth",
-    "n": 2,
-    "myth": "Online banks are a scam",
-    "fact": "Many are well established and fully insured. Just check."
-   },
-   {
-    "at": "Myth three",
-    "type": "myth",
-    "n": 3,
-    "myth": "A savings account is enough to build wealth",
-    "fact": "Right for short-term money. Over decades, investing has historically grown faster."
-   }
-  ]
- },
- {
-  "label": "Recap",
-  "text": "Let's recap. A high-yield savings account pays much more interest than a typical bank account. Check the APY, fees and conditions. Make sure the bank is FDIC or NCUA insured. Remember the rate is variable. Use it for your emergency fund and short-term goals, and invest for the long term. If this helped, subscribe. Next, we'll look at whole life insurance and ask the big question: is it worth it? See you there.",
-  "beats": [
-   {
-    "at": "^",
-    "type": "checklist",
-    "head": "Recap",
-    "items": [
-     "Much more interest than a typical account",
-     "Check APY, fees and conditions",
-     "FDIC or NCUA insured",
-     "The rate is variable",
-     "Short-term money here, invest for the long term"
-    ],
-    "marks": [
-     "A high-yield savings",
-     "Check the APY",
-     "Make sure",
-     "Remember the rate",
-     "Use it for"
+     "check the APY",
+     "open the account",
+     "set up an automatic",
+     "Name it"
     ]
    },
    {
-    "at": "If this helped",
+    "at": "Next on the channel",
     "type": "subscribe",
     "next": "Is whole life insurance worth it?",
     "next_sub": "what it costs and who it's for",

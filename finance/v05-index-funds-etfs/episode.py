@@ -1,11 +1,31 @@
-# Ролик «Index Funds & ETFs Explained»
+# Index Funds & ETFs, Explained (рубрика Start Here, тема sky)
+THEME = "sky"
+LOOK = "finn"
 SECTIONS = [
  {
   "label": "Intro",
-  "text": "In 1976, a fund launched with a strange idea: don't try to beat the market. Just buy all of it. It raised only about eleven million dollars, far less than planned, and some people called it a recipe for being average. Fifty years later, index funds hold trillions of dollars, and they're one of the most recommended ways for ordinary people to invest. Today: what index funds and ETFs are, how they work, how to choose one, and the mistakes to avoid. This video is for education only. It's not financial advice.",
+  "text": "Most professional fund managers fail to beat a simple index fund over the long run. In the next few minutes, you'll learn what index funds and ETFs are, and how to buy your first one. In 1976, a fund launched with a strange idea: don't try to beat the market. Just buy all of it. It raised only about eleven million dollars, far less than planned, and some people called it a recipe for being average. Fifty years later, index funds hold trillions of dollars, and they're one of the most recommended ways for ordinary people to invest. Today: what index funds and ETFs are, how they work, how to choose one, and the mistakes to avoid. This video is for education only. It's not financial advice.",
   "beats": [
    {
     "at": "^",
+    "type": "hook",
+    "kicker": "Start Here",
+    "text": "Most pros can't beat a simple index fund."
+   },
+   {
+    "at": "In the next few minutes",
+    "type": "hook",
+    "kicker": "In this video",
+    "text": "What index funds and ETFs are, and how to buy one."
+   },
+   {
+    "at": "In 1976, a",
+    "type": "ident",
+    "series": "Start Here",
+    "title": "Index Funds & ETFs, Explained"
+   },
+   {
+    "at": "fund launched with",
     "type": "say",
     "text": "1976: a fund with a strange idea.",
     "sub": "Don't beat the market. Just buy all of it.",
@@ -189,7 +209,8 @@ SECTIONS = [
     "char": [
      "thumbs_up",
      420,
-     640
+     640,
+     "sam"
     ]
    }
   ]
@@ -336,7 +357,8 @@ SECTIONS = [
     "char": [
      "worried",
      420,
-     640
+     640,
+     "sam"
     ]
    },
    {

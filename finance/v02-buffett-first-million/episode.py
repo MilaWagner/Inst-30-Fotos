@@ -1,11 +1,31 @@
-# Ролик «How Warren Buffett Made His First Million»
+# How Buffett Made His First Million (рубрика Money Stories, тема blush)
+THEME = "blush"
+LOOK = "finn_casual"
 SECTIONS = [
  {
   "label": "Intro",
-  "text": "In 1942, an eleven-year-old boy in Omaha, Nebraska, bought his first stock. Three shares, at thirty-eight dollars each. About twenty years later, he had his first million. Today, Warren Buffett is one of the richest people in history. But here's the strange part. By widely cited estimates, around ninety-nine percent of his fortune came after his fiftieth birthday. So how did he make that first million? And what can you actually copy, without being a genius? Let's break it down. Quick note: this video is for education only. It's not financial advice, and this channel is not affiliated with Warren Buffett or Berkshire Hathaway.",
+  "text": "Warren Buffett didn't get rich from one genius trade. He got rich from a few simple habits anyone can copy. In the next few minutes, you'll see exactly how he made his first million, and what you can use from it today. In 1942, an eleven-year-old boy in Omaha, Nebraska, bought his first stock. Three shares, at thirty-eight dollars each. About twenty years later, he had his first million. Today, Warren Buffett is one of the richest people in history. But here's the strange part. By widely cited estimates, around ninety-nine percent of his fortune came after his fiftieth birthday. So how did he make that first million? And what can you actually copy, without being a genius? Let's break it down. Quick note: this video is for education only. It's not financial advice, and this channel is not affiliated with Warren Buffett or Berkshire Hathaway.",
   "beats": [
    {
     "at": "^",
+    "type": "hook",
+    "kicker": "Money Stories",
+    "text": "Buffett got rich from simple habits you can copy."
+   },
+   {
+    "at": "In the next few minutes",
+    "type": "hook",
+    "kicker": "In this video",
+    "text": "How he made his first million, and what to copy."
+   },
+   {
+    "at": "In 1942, an",
+    "type": "ident",
+    "series": "Money Stories",
+    "title": "How Buffett Made His First Million"
+   },
+   {
+    "at": "eleven-year-old boy in",
     "type": "say",
     "text": "1942: an 11-year-old buys his first stock.",
     "sub": "3 shares at $38 each",
@@ -202,7 +222,8 @@ SECTIONS = [
     "char": [
      "think",
      420,
-     640
+     640,
+     "sam"
     ]
    },
    {
@@ -382,7 +403,8 @@ SECTIONS = [
     "char": [
      "think",
      420,
-     640
+     640,
+     "maya"
     ]
    },
    {
@@ -448,7 +470,8 @@ SECTIONS = [
     "char": [
      "happy",
      420,
-     640
+     640,
+     "sam"
     ]
    }
   ]
