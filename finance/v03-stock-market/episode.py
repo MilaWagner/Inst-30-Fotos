@@ -1,59 +1,58 @@
-# Ролик «How the Stock Market Actually Works»
+# Ролик «The Bakery That Went Public» (сторителлинг, тема mint)
+THEME = "mint"
+LOOK = "finn_hoodie"
 SECTIONS = [
  {
-  "label": "Intro",
-  "text": "Every day, trillions of dollars move through the stock market. Prices jump, prices crash, and the news makes it sound like a casino. But underneath all that noise, the stock market is surprisingly simple. Today, we'll open it up: what a stock really is, why prices move, what an index is, why markets crash, and what all of this means for your money. This video is for education only. It's not financial advice.",
+  "label": "A bakery",
+  "text": "Most people think the stock market is a casino, and that's exactly why so many lose money in it. In the next few minutes, you'll understand what a share really is, why prices jump around, and why crashes happen, through one simple story. It's about a bakery. It's made up, but every step in it works exactly like the real stock market. This is for education only, and it's not financial advice.",
   "beats": [
    {
     "at": "^",
-    "type": "say",
-    "text": "Trillions of dollars move through the stock market every day.",
-    "sub": "It sounds like a casino. It isn't.",
-    "char": [
-     "think",
-     420,
-     640
-    ]
+    "type": "hook",
+    "kicker": "Money Stories",
+    "text": "Most people think the stock market is a casino. That's why they lose."
    },
    {
-    "at": "Today, we'll open it up",
-    "type": "checklist",
-    "head": "Today",
-    "items": [
-     "What a stock really is",
-     "Why prices move",
-     "What an index is",
-     "Why markets crash"
-    ],
-    "marks": [
-     "what a stock",
-     "why prices",
-     "what an index",
-     "why markets crash"
-    ]
+    "at": "In the next few minutes",
+    "type": "hook",
+    "kicker": "In this video",
+    "text": "What a share is, why prices jump, why crashes happen."
    },
    {
-    "at": "This video is for education",
+    "at": "It's about a bakery",
+    "type": "ident",
+    "series": "Money Stories",
+    "title": "The Bakery That Went Public"
+   },
+   {
+    "at": "This is for education only",
     "type": "disclaimer"
    }
   ]
  },
  {
-  "label": "What a stock is",
-  "text": "Let's start with a business. Imagine a bakery that wants to open ten new shops. It needs money. It could borrow from a bank. Or it could sell small pieces of ownership to investors. Those pieces are called shares, or stocks. If you own a share, you own a tiny part of that business. When the business earns more, your piece can become more valuable. And some companies pay part of their profits to shareholders in cash. That's called a dividend. The first time a company sells its shares to the public is called an initial public offering, or IPO.",
+  "label": "Chapter 1: The money problem",
+  "text": "Our bakery is doing well. Lines out the door. The owner wants to open ten new shops, and that takes money. She has two choices. Borrow from a bank, and pay interest. Or sell small pieces of ownership in her business to investors. Those pieces are called shares, or stocks. Whoever buys one owns a tiny part of the bakery, and of its future profits.",
   "beats": [
    {
     "at": "^",
+    "type": "title",
+    "kicker": "Chapter 1",
+    "text": "The money problem"
+   },
+   {
+    "at": "The owner wants",
     "type": "say",
-    "text": "A bakery wants to open ten new shops. It needs money.",
+    "text": "Ten new shops. That takes money.",
     "char": [
      "think",
      420,
-     640
+     640,
+     "maya"
     ]
    },
    {
-    "at": "It could borrow",
+    "at": "She has two choices",
     "type": "twocol",
     "head": "Two ways to raise money",
     "step": 2.5,
@@ -61,9 +60,8 @@ SECTIONS = [
      [
       "Borrow",
       [
-       "A loan from a bank",
-       "Must be paid back",
-       "With interest"
+       "A bank loan",
+       "Paid back with interest"
       ],
       [
        52,
@@ -75,33 +73,27 @@ SECTIONS = [
       "Sell shares",
       [
        "Small pieces of ownership",
-       "Investors become owners",
-       "They share the profits"
+       "Investors share the future"
       ],
       [
-       16,
-       122,
-       96
+       14,
+       128,
+       98
       ]
      ]
     ]
-   },
+   }
+  ]
+ },
+ {
+  "label": "Chapter 2: Going public",
+  "text": "She chooses shares. The first time a company sells its shares to the public is called an initial public offering, or IPO. Now thousands of people own a piece of the bakery. If profits grow, their pieces can become more valuable. And if the bakery decides to pay out part of its profits in cash, every shareholder gets a little. That's called a dividend.",
+  "beats": [
    {
-    "at": "If you own a share",
-    "type": "lines",
-    "head": "Owning a share",
-    "lines": [
-     [
-      "A tiny part of the business"
-     ],
-     [
-      "Business earns more → piece can be worth more"
-     ],
-     [
-      "Dividend = part of the profits paid in cash"
-     ]
-    ],
-    "step": 3.0
+    "at": "^",
+    "type": "title",
+    "kicker": "Chapter 2",
+    "text": "Going public"
    },
    {
     "at": "The first time a company",
@@ -109,23 +101,35 @@ SECTIONS = [
     "head": "First sale of shares to the public",
     "num": "IPO",
     "sub": "initial public offering"
+   },
+   {
+    "at": "If profits grow",
+    "type": "lines",
+    "head": "What a shareholder gets",
+    "lines": [
+     [
+      "A tiny part of the business"
+     ],
+     [
+      "A piece that can grow in value"
+     ],
+     [
+      "Dividends: part of the profits in cash"
+     ]
+    ],
+    "step": 2.5
    }
   ]
  },
  {
-  "label": "The exchange",
-  "text": "After that, shares are bought and sold between investors on a stock exchange. Think of it as a giant marketplace that matches buyers and sellers. The New York Stock Exchange traces its roots back to 1792, when traders signed an agreement under a buttonwood tree in Manhattan. Today there's the New York Stock Exchange and the Nasdaq in the United States, the London Stock Exchange in the UK, the Toronto Stock Exchange in Canada, and the ASX in Australia. Most trading now happens electronically, in fractions of a second. And you don't go there yourself. You use a broker, usually an app, which sends your order to the market.",
+  "label": "Chapter 3: The marketplace",
+  "text": "After the IPO, shareholders can sell to other investors on a stock exchange, a giant marketplace that matches buyers and sellers. The New York Stock Exchange traces its roots back to 1792, when traders signed an agreement under a buttonwood tree in Manhattan. Today there's also the Nasdaq, the London Stock Exchange, the Toronto Stock Exchange, and the ASX in Australia. Nobody shouts on a trading floor to buy a bakery share anymore. You tap a button in a broker's app, and your order is matched electronically, in a fraction of a second.",
   "beats": [
    {
     "at": "^",
-    "type": "say",
-    "text": "After the IPO, investors trade shares on a stock exchange.",
-    "sub": "A giant marketplace that matches buyers and sellers",
-    "char": [
-     "point_right",
-     420,
-     640
-    ]
+    "type": "title",
+    "kicker": "Chapter 3",
+    "text": "The marketplace"
    },
    {
     "at": "The New York Stock Exchange traces",
@@ -135,57 +139,70 @@ SECTIONS = [
     "sub": "traders signed an agreement under a buttonwood tree"
    },
    {
-    "at": "Today there's",
-    "type": "checklist",
+    "at": "Today there's also",
+    "type": "countries",
     "head": "Major exchanges",
-    "items": [
-     "US: New York Stock Exchange, Nasdaq",
-     "UK: London Stock Exchange",
-     "Canada: Toronto Stock Exchange",
-     "Australia: ASX"
+    "rows": [
+     [
+      "United States",
+      "NYSE · Nasdaq"
+     ],
+     [
+      "United Kingdom",
+      "London Stock Exchange"
+     ],
+     [
+      "Canada",
+      "Toronto Stock Exchange"
+     ],
+     [
+      "Australia",
+      "ASX"
+     ]
     ],
     "marks": [
-     "Today there's",
+     "Today there's also",
      "the London",
      "the Toronto",
      "and the ASX"
     ]
    },
    {
-    "at": "And you don't go there",
+    "at": "You tap a button",
     "type": "say",
-    "text": "You use a broker, usually an app.",
-    "sub": "It sends your order to the market",
+    "text": "Tap a button. Matched in a fraction of a second.",
     "char": [
-     "thumbs_up",
+     "happy",
      420,
-     640
+     640,
+     "sam"
     ]
    }
   ]
  },
  {
-  "label": "Why prices move",
-  "text": "So why do prices move? In the short term, it's simple: supply and demand. If more people want to buy a stock than sell it, the price rises until enough sellers appear. If more want to sell, the price falls. But what makes people want to buy or sell? News. Earnings reports. Interest rates. Fear. Excitement. In the short term, prices can swing wildly for reasons that have little to do with the business itself.",
+  "label": "Chapter 4: A bad Monday",
+  "text": "One Monday, the bakery's share price drops eight percent. Did people suddenly stop eating bread? No. A rumor spread that flour prices will rise. More people wanted to sell than buy, so the price fell until enough buyers showed up. That's supply and demand. In the short term, prices move on news, interest rates, fear and excitement, often for reasons that have little to do with the business itself.",
   "beats": [
    {
     "at": "^",
+    "type": "title",
+    "kicker": "Chapter 4",
+    "text": "A bad Monday"
+   },
+   {
+    "at": "One Monday",
+    "type": "bignum",
+    "head": "Bakery share price, one Monday",
+    "num": "−8%",
+    "sub": "made-up example"
+   },
+   {
+    "at": "A rumor spread",
     "type": "twocol",
-    "head": "Short term: supply and demand",
-    "step": 4,
+    "head": "Supply and demand",
+    "step": 3.0,
     "cols": [
-     [
-      "More buyers",
-      [
-       "Price rises",
-       "until sellers appear"
-      ],
-      [
-       36,
-       156,
-       92
-      ]
-     ],
      [
       "More sellers",
       [
@@ -197,52 +214,119 @@ SECTIONS = [
        64,
        60
       ]
+     ],
+     [
+      "More buyers",
+      [
+       "Price rises",
+       "until sellers appear"
+      ],
+      [
+       36,
+       156,
+       92
+      ]
      ]
     ]
    },
    {
-    "at": "But what makes people",
-    "type": "checklist",
-    "head": "What moves prices short term",
-    "items": [
-     "News",
-     "Earnings reports",
-     "Interest rates",
-     "Fear and excitement"
-    ],
-    "marks": [
-     "News.",
-     "Earnings",
-     "Interest rates",
-     "Fear."
+    "at": "In the short term",
+    "type": "say",
+    "text": "Short term: news, rates, fear, excitement.",
+    "sub": "Often little to do with the business itself",
+    "char": [
+     "shrug",
+     420,
+     640
     ]
    }
   ]
  },
  {
-  "label": "Long term",
-  "text": "In the long term, though, something different happens. Over many years, a company's share price tends to follow what the business actually earns. A company that grows its profits for decades usually sees its stock rise. A company that shrinks usually sees its stock fall. That's why investors often say: in the short run, the market is a voting machine, and in the long run, it's a weighing machine. The quote is credited to Benjamin Graham, Warren Buffett's teacher. Short term, it counts opinions. Long term, it weighs results.",
+  "label": "Chapter 5: Ten years later",
+  "text": "Now jump ten years ahead. The bakery has a hundred shops, and its profits have grown year after year. The share price has climbed with them, with plenty of bad Mondays along the way. That's the pattern over long periods: share prices tend to follow what a business actually earns. Benjamin Graham, Warren Buffett's teacher, put it this way: in the short run, the market is a voting machine. In the long run, it's a weighing machine.",
   "beats": [
    {
     "at": "^",
-    "type": "growth",
-    "head": "Long term: prices tend to follow profits",
-    "lines": [
-     [
-      25,
-      [
-       16,
-       122,
-       96
-      ],
-      0.3
-     ]
-    ]
+    "type": "title",
+    "kicker": "Chapter 5",
+    "text": "Ten years later"
    },
    {
-    "at": "That's why investors",
+    "at": "The bakery has a hundred shops",
+    "type": "pricepath",
+    "head": "Bakery share price over ten years",
+    "points": [
+     [
+      "IPO",
+      10,
+      [
+       112,
+       120,
+       138
+      ]
+     ],
+     [
+      "",
+      14,
+      [
+       14,
+       128,
+       98
+      ]
+     ],
+     [
+      "bad Monday",
+      11,
+      [
+       206,
+       64,
+       60
+      ]
+     ],
+     [
+      "",
+      19,
+      [
+       14,
+       128,
+       98
+      ]
+     ],
+     [
+      "",
+      17,
+      [
+       222,
+       160,
+       36
+      ]
+     ],
+     [
+      "",
+      26,
+      [
+       14,
+       128,
+       98
+      ]
+     ],
+     [
+      "year 10",
+      34,
+      [
+       14,
+       128,
+       98
+      ]
+     ]
+    ],
+    "note": "Illustration of a made-up company, not real data"
+   },
+   {
+    "at": "Benjamin Graham",
     "type": "twocol",
-    "head": "Benjamin Graham's famous idea",
+    "head": "Benjamin Graham's idea",
     "step": 2.5,
     "cols": [
      [
@@ -264,9 +348,9 @@ SECTIONS = [
        "It weighs results"
       ],
       [
-       16,
-       122,
-       96
+       14,
+       128,
+       98
       ]
      ]
     ]
@@ -274,19 +358,14 @@ SECTIONS = [
   ]
  },
  {
-  "label": "Indexes",
-  "text": "Now, when the news says the market is up today, what market do they mean? Usually an index. An index is a list of companies that represents a part of the market. The S&P 500 tracks five hundred large US companies, and bigger companies count for more in it. The Dow Jones tracks thirty big US companies. In the UK there's the FTSE 100, in Canada the S&P/TSX Composite, and in Australia the ASX 200. If the index is up one percent, those companies, on average, gained about one percent that day.",
+  "label": "Chapter 6: Joining an index",
+  "text": "Our bakery is now big enough to join an index. An index is a list of companies that represents part of the market. The S&P 500 tracks five hundred large US companies, and bigger companies count for more. The Dow Jones tracks thirty. The UK has the FTSE 100, Canada the S&P/TSX Composite, and Australia the ASX 200. When the news says the market is up one percent, it usually means one of these lists rose about one percent on average.",
   "beats": [
    {
     "at": "^",
-    "type": "say",
-    "text": "“The market is up today.” Which market?",
-    "sub": "Usually an index",
-    "char": [
-     "shrug",
-     420,
-     640
-    ]
+    "type": "title",
+    "kicker": "Chapter 6",
+    "text": "Joining an index"
    },
    {
     "at": "An index is a list",
@@ -316,89 +395,40 @@ SECTIONS = [
     "marks": [
      "The S&P 500 tracks",
      "The Dow Jones",
-     "In the UK",
-     "in Canada",
-     "and in Australia"
+     "The UK has",
+     "Canada the",
+     "and Australia"
     ]
    }
   ]
  },
  {
-  "label": "Returns",
-  "text": "Here's what history shows. Since it launched in 1957, the S&P 500 has returned roughly ten percent a year on average, including dividends, before inflation. After inflation, it's closer to six or seven percent. But that average hides a lot of bumpy years. Some years the market gains thirty percent. Some years it loses twenty or more. The average only shows up if you stay invested through the bad years too. And past returns don't guarantee future ones.",
+  "label": "Chapter 7: The crash",
+  "text": "Then a recession hits. Everyone expects lower profits, and many investors try to sell at the same time. The whole market falls, and our bakery falls with it, even though people still buy bread. A drop of ten percent from a recent high is called a correction. Twenty percent or more is a bear market. This really happens. From its peak in 2007 to its low in 2009, the S&P 500 fell about fifty-seven percent. In 2020, it fell about thirty-four percent in roughly a month. Both times, it later recovered to new highs, but recoveries can take years, and nothing guarantees how long the next one takes.",
   "beats": [
    {
     "at": "^",
-    "type": "bignum",
-    "head": "S&P 500 since 1957, average per year",
-    "num": "~10%",
-    "sub": "including dividends, before inflation (~6–7% after inflation)",
-    "src": "Past returns don't guarantee future returns"
+    "type": "title",
+    "kicker": "Chapter 7",
+    "text": "The crash"
    },
    {
-    "at": "But that average hides",
-    "type": "bars",
-    "head": "Some years look very different",
-    "step": 1.5,
-    "rows": [
-     [
-      "A strong year (example)",
-      30,
-      "+30%",
-      [
-       36,
-       156,
-       92
-      ]
-     ],
-     [
-      "An average year",
-      10,
-      "+10%",
-      [
-       16,
-       122,
-       96
-      ]
-     ],
-     [
-      "A bad year (example)",
-      20,
-      "−20%",
-      [
-       206,
-       64,
-       60
-      ]
-     ]
-    ],
-    "note": "Illustration of how bumpy single years can be"
-   }
-  ]
- },
- {
-  "label": "Crashes",
-  "text": "So let's talk about crashes. A drop of ten percent from a recent high is usually called a correction. A drop of twenty percent or more is called a bear market. A rising market is called a bull market. Crashes happen more often than people expect. In the financial crisis, the S&P 500 fell about fifty-seven percent from its peak in 2007 to its low in 2009. In 2020, during the pandemic, it fell about thirty-four percent in roughly a month. Both times, it later recovered and went on to new highs. But recoveries can take years, and there's no guarantee of how long the next one will take.",
-  "beats": [
-   {
-    "at": "^",
+    "at": "A drop of ten percent",
     "type": "checklist",
     "head": "Market words",
     "items": [
      "Correction: down ~10% from a high",
-     "Bear market: down 20% or more",
-     "Bull market: a rising market"
+     "Bear market: down 20% or more"
     ],
     "marks": [
      "A drop of ten",
-     "A drop of twenty",
-     "A rising market"
+     "Twenty percent or more"
     ]
    },
    {
-    "at": "In the financial crisis",
+    "at": "This really happens",
     "type": "bars",
-    "head": "S&P 500 drops from peak to low",
+    "head": "Real S&P 500 drops, peak to low",
     "step": 3.0,
     "rows": [
      [
@@ -422,13 +452,13 @@ SECTIONS = [
       ]
      ]
     ],
-    "note": "Both times it later recovered to new highs. No guarantee next time."
+    "note": "Both times it later recovered to new highs. Source: S&P Dow Jones Indices"
    },
    {
-    "at": "But recoveries can take years",
+    "at": "but recoveries can take years",
     "type": "say",
     "text": "Recoveries can take years.",
-    "sub": "No one knows how long the next one will take",
+    "sub": "Nothing guarantees how long the next one takes",
     "char": [
      "worried",
      420,
@@ -438,124 +468,60 @@ SECTIONS = [
   ]
  },
  {
-  "label": "Why crashes happen",
-  "text": "Why do crashes happen? Usually because expectations change fast. Investors suddenly expect lower profits, higher interest rates, or a recession, and everyone tries to sell at the same time. Prices fall faster than the businesses themselves change. For a long-term investor, that's the uncomfortable truth: the same crashes that feel terrifying are also the moments when shares go on sale. The investors who get hurt most are often the ones who panic and sell near the bottom.",
+  "label": "What it means for you",
+  "text": "So what does the bakery story mean for your money? Since it launched in 1957, the S&P 500 has returned roughly ten percent a year on average, including dividends, before inflation. After inflation, closer to six or seven percent. But that average only shows up for people who stayed invested through the bad Mondays and the crashes. Past returns don't guarantee future ones. That's why most beginners don't try to pick the next great bakery. They buy a fund that holds a whole index, through a regulated broker, ideally in a tax-advantaged account like a 401(k) or IRA in the US, an ISA in the UK, or a TFSA in Canada. In Australia, your superannuation is already invested for you.",
   "beats": [
    {
     "at": "^",
-    "type": "lines",
-    "head": "Why crashes happen",
-    "lines": [
+    "type": "bignum",
+    "head": "S&P 500 since 1957, average per year",
+    "num": "~10%",
+    "sub": "including dividends, before inflation (~6–7% after)",
+    "src": "Past returns don't guarantee future returns"
+   },
+   {
+    "at": "That's why most beginners",
+    "type": "countries",
+    "head": "How most beginners take part",
+    "rows": [
      [
-      "Expectations change fast"
+      "United States",
+      "Index fund in a 401(k) or IRA"
      ],
      [
-      "Everyone tries to sell at once"
+      "United Kingdom",
+      "Index fund in an ISA"
      ],
      [
-      "Prices fall faster than businesses change"
+      "Canada",
+      "Index fund in a TFSA"
+     ],
+     [
+      "Australia",
+      "Superannuation"
      ]
     ],
-    "step": 4.0
-   },
-   {
-    "at": "For a long-term investor",
-    "type": "say",
-    "text": "Crashes are when shares go on sale.",
-    "sub": "Panic-selling near the bottom hurts the most",
-    "char": [
-     "think",
-     420,
-     640
-    ]
-   }
-  ]
- },
- {
-  "label": "How to take part",
-  "text": "So how do regular people actually take part? You don't need to pick the next big winner. Most beginners start with a fund that buys a whole index at once, like an S&P 500 fund or a global fund. You buy it through a regulated broker, ideally inside a tax-advantaged account, like an ISA in the UK, a TFSA in Canada, or a 401(k) or IRA in the US. In Australia, your superannuation is already invested in the market for you. Then you add money regularly, and you give it time. We covered the step-by-step setup in our investing for beginners video.",
-  "beats": [
-   {
-    "at": "^",
-    "type": "say",
-    "text": "You don't need to pick the next big winner.",
-    "char": [
-     "point_right",
-     420,
-     640
-    ]
-   },
-   {
-    "at": "Most beginners start",
-    "type": "checklist",
-    "head": "How regular people take part",
-    "items": [
-     "A fund that buys a whole index",
-     "Through a regulated broker",
-     "In a tax-advantaged account",
-     "Add money regularly, give it time"
-    ],
     "marks": [
-     "Most beginners",
-     "You buy it through",
-     "ideally inside",
-     "Then you add"
+     "That's why most",
+     "an ISA",
+     "a TFSA",
+     "In Australia"
     ]
    }
   ]
  },
  {
-  "label": "Three myths",
-  "text": "Let's clear up three myths. Myth one: the stock market is just gambling. In a casino, the odds are built against you. Owning shares means owning real businesses that produce real profits. It's risky, but it's not a casino. Myth two: you need to watch the market every day. Most long-term investors do better by checking less often, and sticking to a plan. Myth three: a falling price means a bad company. Sometimes the whole market falls, and good companies fall with it. Price and value are not the same thing.",
+  "label": "The ending",
+  "text": "So a share is a piece of a real business. Short term, its price is a vote. Long term, it's a weight. And the people who do best are usually the ones who stay calm on the bad Mondays. Next on the channel: the psychology of money, and why smart people make bad money decisions. See you there.",
   "beats": [
    {
     "at": "^",
-    "type": "myth",
-    "n": 1,
-    "myth": "The stock market is just gambling",
-    "fact": "Shares are pieces of real businesses with real profits. Risky, but not a casino."
+    "type": "takeaway",
+    "head": "The bakery lesson",
+    "text": "Short term, a vote. Long term, a weight. Stay calm on the bad Mondays."
    },
    {
-    "at": "Myth two",
-    "type": "myth",
-    "n": 2,
-    "myth": "You need to watch the market every day",
-    "fact": "Most long-term investors do better checking less often and sticking to a plan."
-   },
-   {
-    "at": "Myth three",
-    "type": "myth",
-    "n": 3,
-    "myth": "A falling price means a bad company",
-    "fact": "Sometimes the whole market falls. Price and value are not the same thing."
-   }
-  ]
- },
- {
-  "label": "Recap",
-  "text": "Let's recap. A stock is a piece of a real business. Exchanges match buyers and sellers. In the short term, prices move on supply, demand and emotion. In the long term, they tend to follow profits. Indexes like the S&P 500 show how a big group of companies is doing. Crashes are normal, and staying calm matters more than predicting them. If this helped, subscribe. Next, we'll look at the psychology of money: why smart people make bad money decisions, and how to avoid them. See you there.",
-  "beats": [
-   {
-    "at": "^",
-    "type": "checklist",
-    "head": "Recap",
-    "items": [
-     "A stock is a piece of a real business",
-     "Exchanges match buyers and sellers",
-     "Short term: emotion. Long term: profits",
-     "Indexes show how groups of companies do",
-     "Crashes are normal: stay calm"
-    ],
-    "marks": [
-     "A stock is",
-     "Exchanges",
-     "In the short term",
-     "Indexes like",
-     "Crashes are normal"
-    ]
-   },
-   {
-    "at": "If this helped",
+    "at": "Next on the channel",
     "type": "subscribe",
     "next": "The psychology of money",
     "next_sub": "why smart people make bad money decisions",

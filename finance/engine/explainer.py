@@ -18,6 +18,34 @@ CARD = (255, 255, 255); ACC = (16, 122, 96); GOLD = (222, 160, 36); RED = (206, 
 GREEN = (36, 156, 92); BLUE = (52, 104, 214); SOFT = (236, 231, 221)
 SEG = [ACC, BLUE, GOLD, (140, 100, 200), (232, 120, 80)]
 
+# Темы оформления по рубрикам (episode.py: THEME = "sky" и т.п.). Тёмных тем нет: текст в карточках тёмный.
+THEMES = {
+    "cream": dict(BG=(247, 244, 238), ACC=(16, 122, 96), LINE=(226, 220, 208), SOFT=(236, 231, 221), PILL=(20, 33, 61), MOTIF=None),
+    "sky":   dict(BG=(235, 242, 251), ACC=(38, 92, 196), LINE=(210, 222, 240), SOFT=(222, 232, 247), PILL=(30, 60, 130), MOTIF="dots"),
+    "mint":  dict(BG=(233, 246, 240), ACC=(14, 128, 98), LINE=(205, 230, 218), SOFT=(219, 239, 229), PILL=(10, 90, 70), MOTIF="grid"),
+    "blush": dict(BG=(251, 239, 234), ACC=(196, 82, 58), LINE=(240, 218, 208), SOFT=(246, 226, 218), PILL=(120, 40, 30), MOTIF="diag"),
+    "lilac": dict(BG=(242, 238, 251), ACC=(112, 78, 186), LINE=(224, 216, 242), SOFT=(232, 226, 247), PILL=(70, 45, 130), MOTIF="dots"),
+    "sun":   dict(BG=(252, 245, 226), ACC=(190, 120, 10), LINE=(240, 226, 190), SOFT=(246, 236, 206), PILL=(110, 70, 10), MOTIF="grid"),
+}
+PILL = (20, 33, 61); MOTIF = None
+
+def apply_theme(name):
+    g = globals(); t = THEMES.get(name or "cream", THEMES["cream"])
+    for k, v in t.items(): g[k] = v
+    g["SEG"] = [g["ACC"], BLUE, GOLD, (140, 100, 200), (232, 120, 80)]
+
+def draw_motif(d):
+    if not MOTIF: return
+    col = mix(BG, LINE, .55)
+    if MOTIF == "dots":
+        for y in range(30, H, 60):
+            for x in range(30 + (30 if (y // 60) % 2 else 0), W, 60): d.ellipse((x - 3, y - 3, x + 3, y + 3), fill=col)
+    elif MOTIF == "grid":
+        for x in range(0, W, 80): d.line([(x, 0), (x, H)], fill=col, width=1)
+        for y in range(0, H, 80): d.line([(0, y), (W, y)], fill=col, width=1)
+    elif MOTIF == "diag":
+        for x in range(-H, W, 70): d.line([(x, H), (x + H, 0)], fill=col, width=2)
+
 _fc = {}
 def F(size, w="SemiBold", disp=False):
     name = ("InterDisplay-" if disp else "Inter-") + w + ".otf"
@@ -605,6 +633,47 @@ def b_lifeline(c, p):
         text(c, (x, y - 50), f"age {age}", 40, col, "Bold", "ms", a, disp=True)
         for k, ln in enumerate(wrap(lab, 32, 250, "SemiBold")): text(c, (x, y + 60 + k * 42), ln, 32, INK, "SemiBold", "ma", a)
 
+def b_hook(c, p):
+    """Крючок первых секунд: рубрика + крупное обещание/боль, слова появляются быстро."""
+    text(c, (960, 250), p.get("kicker", "").upper(), 34, ACC, "Bold", "ma", c.a(0, .25))
+    words = p["text"].split(); lines = wrap(p["text"], 84, 1560, "Bold")
+    shown = int(len(words) * clamp(c.lt / p.get("reveal", 1.6))) + 1; k = 0
+    y = 520 - len(lines) * 52
+    for ln in lines:
+        lw = ln.split(); vis = " ".join(lw[:max(0, shown - k)]); k += len(lw)
+        if vis: text(c, (960, y), vis, 84, INK, "Bold", "ma", 1, disp=True)
+        y += 104
+    bw = 700 * ease((c.lt - .3) / .8); c.d.rounded_rectangle((960 - bw / 2, y + 20, 960 + bw / 2, y + 32), 6, fill=ACC)
+
+def b_ident(c, p):
+    """Заставка рубрики: цветная плашка на весь кадр, название рубрики и ролика."""
+    a = ease(c.lt / .35); x = W * (1 - a)
+    c.d.rectangle((x, 0, W, H), fill=ACC)
+    c.d.rectangle((x, H - 120, W, H), fill=PILL)
+    if a > .6:
+        al = ease((c.lt - .25) / .3)
+        text(c, (x + 960, 380), p.get("series", "").upper(), 40, mix(ACC, CARD, al), "Bold", "ma")
+        for i, ln in enumerate(wrap(p["title"], 96, 1600, "Bold")):
+            text(c, (x + 960, 460 + i * 112), ln, 96, mix(ACC, CARD, al), "Bold", "ma", disp=True)
+
+def b_question(c, p):
+    """Карточка вопроса: большой номер в круге + текст вопроса (формат Q&A)."""
+    al = c.a(); cx, cy = 560, 470
+    r = 150 * (.85 + .15 * ease(c.lt / .5))
+    c.d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=fade(ACC, al))
+    text(c, (cx, cy), p.get("tag", "Q"), 130, CARD, "Bold", "mm", al, disp=True)
+    lines = wrap(p["q"], 64, 860, "Bold")
+    y = 470 - len(lines) * 40
+    for i, ln in enumerate(lines): text(c, (800, y + i * 80), ln, 64, INK, "Bold", "la", c.a(.25), disp=True)
+    if p.get("sub"): text(c, (800, y + len(lines) * 80 + 20), p["sub"], 38, MUTED, "Medium", "la", c.a(.6))
+
+def b_takeaway(c, p):
+    """Финальная мысль одной фразой (вместо списка Recap)."""
+    lines = wrap(p["text"], 72, 1500, "Bold")
+    y = 430 - len(lines) * 46
+    text(c, (960, y - 90), p.get("head", "The one thing to remember"), 36, ACC, "Bold", "ma", c.a())
+    for i, ln in enumerate(lines): text(c, (960, y + i * 92), ln, 72, INK, "Bold", "ma", c.a(.3 + i * .15), disp=True)
+
 BEATS = {k[2:]: v for k, v in globals().items() if k.startswith("b_")}
 
 # ---------- субтитры / тайминг ----------
@@ -647,6 +716,7 @@ def build_timeline(ep, audio_dir):
 
 def render_frame(secs, total, T):
     img = Image.new("RGB", (W, H), BG)
+    draw_motif(ImageDraw.Draw(img))
     sec = secs[0]
     for s in secs:
         if T >= s["start"] - .01: sec = s
@@ -657,13 +727,13 @@ def render_frame(secs, total, T):
     c = Ctx(img, T - beat_t, nxt[0] - beat_t)
     BEATS[beat["type"]](c, beat)
     if beat.get("char"):
-        pose, cx, hh = beat["char"]
+        ch = beat["char"]; pose, cx, hh = ch[0], ch[1], ch[2]; look = ch[3] if len(ch) > 3 else None
         al = c.a(0, .5); blink = (T % 3.7) < .13
-        character.paste(img, pose, cx, 900 + (1 - al) * 400, hh, blink, 4 * math.sin(T * 2.2))
+        character.paste(img, pose, cx, 900 + (1 - al) * 400, hh, blink, 4 * math.sin(T * 2.2), look)
     d = c.d
-    # шапка
-    d.rounded_rectangle((60, 46, 60 + F(26, "Bold").getlength(sec["label"].upper()) + 48, 96), 25, fill=INK)
-    d.text((84, 71), sec["label"].upper(), font=F(26, "Bold"), fill=CARD, anchor="lm")
+    # шапка (не на крючке и заставке)
+    if beat["type"] not in ("hook", "ident"): d.rounded_rectangle((60, 46, 60 + F(26, "Bold").getlength(sec["label"].upper()) + 48, 96), 25, fill=PILL)
+    if beat["type"] not in ("hook", "ident"): d.text((84, 71), sec["label"].upper(), font=F(26, "Bold"), fill=CARD, anchor="lm")
     # прогресс
     d.rectangle((0, H - 8, W, H), fill=LINE); d.rectangle((0, H - 8, W * T / total, H), fill=ACC)
     # субтитр
@@ -690,7 +760,8 @@ def render_chunk(args):
 
 def load(path):
     spec = importlib.util.spec_from_file_location("ep", path); m = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(m); return m
+    spec.loader.exec_module(m); apply_theme(getattr(m, "THEME", None))
+    character.DEFAULT_LOOK = getattr(m, "LOOK", "finn"); return m
 
 def main(ep_path, audio_dir, out, stills=None):
     ep = load(ep_path); secs, total = build_timeline(ep, audio_dir)
