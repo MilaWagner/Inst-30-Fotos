@@ -440,8 +440,8 @@ SECTIONS = [
    {
     "at": "Next on the channel",
     "type": "subscribe",
-    "next": "High-yield savings accounts",
-    "next_sub": "the best place for money you'll need soon",
+    "next": "Where should $10,000 live?",
+    "next_sub": "5 places for your cash, head to head",
     "char": [
      "wave",
      230,
